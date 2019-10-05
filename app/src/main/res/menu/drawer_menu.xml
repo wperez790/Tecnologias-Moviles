@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="nav_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home"
+            android:title="@string/home" />
+        <item
+            android:id="@+id/nav_extend"
+            android:icon="@drawable/ic_more_details"
+            android:title="@string/masDetalles" />
+        <item
+            android:id="@+id/nav_map"
+            android:icon="@drawable/ic_map"
+            android:title="@string/mapa" />
+        <item
+            android:id="@+id/nav_edit_profile"
+            android:icon="@drawable/ic_edit"
+            android:title="@string/editarPerfil" />
+    </group>
+
+    <item android:title="@string/configuracion">
+    <menu android:checkableBehavior="single">
+            <item
+                android:id="@+id/nav_config"
+                android:icon="@drawable/ic_setting"
+                android:title="@string/configuracion" />
+
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_logout"
+                android:title="@string/cerrarSesion" />
+    </menu>
+    </item>
+</menu>

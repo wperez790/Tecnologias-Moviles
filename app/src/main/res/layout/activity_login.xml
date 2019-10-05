@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".LoginActivity"
+    android:background="@color/colorFondo">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/logoH"
+        android:layout_marginTop="@dimen/marginL"
+        android:src="@drawable/logo"
+        />
+
+    <FrameLayout
+        android:id="@+id/FragmentListaUsuarios"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginM"/>
+
+</LinearLayout>

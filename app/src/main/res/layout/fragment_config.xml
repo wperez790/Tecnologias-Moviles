@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/nombreUsuario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginH"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ingreseContrasena"
+        style="@style/textoCentradoM"/>
+
+    <EditText
+        android:id="@+id/ingresoContrasena"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/textM"
+        android:inputType="textPassword"
+        style="@style/inputText"/>
+
+    <CheckBox
+        android:id="@+id/mantenerSesion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/mantenerIniciado"
+        android:layout_marginTop="@dimen/marginM"
+        android:layout_marginStart="@dimen/marginM"
+        android:checked="true"/>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/btnIngresar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/textM"
+        android:text="@string/ingresar"
+        style="@style/BotonAceptar"
+        android:layout_marginBottom="@dimen/marginM"/>
+
+</LinearLayout>
