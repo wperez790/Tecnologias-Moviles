@@ -1,6 +1,6 @@
 ﻿# Tecnologias-Moviles
 Trabajo materia tecnologías móviles
-Nicolas
+Walter Gabriel Perez Sardi
 
 Lista de usuarios que se registraron (un nombre por linea).
 /ListaUsuarios.txt
