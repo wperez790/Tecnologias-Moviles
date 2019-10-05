@@ -102,7 +102,7 @@ public class FragmentEditarUsuario extends Fragment {
 
             Util.saveImage(fl, bmp);
         }
-        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Guardado", Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(getActivity().getApplicationContext(),R.string.guardado, Toast.LENGTH_SHORT);
         toast.show();
 
         Usuario user = new Usuario();
@@ -117,7 +117,7 @@ public class FragmentEditarUsuario extends Fragment {
         if(!user.getUsuario().equals(currentUser.getUsuario())) {
 
             if(userBO.getUsuario(user.getUsuario()) != null){
-                Toast.makeText(getActivity().getApplicationContext(),"El usuario ya existe", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplicationContext(),R.string.usuarioYaExiste, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -134,26 +134,30 @@ public class FragmentEditarUsuario extends Fragment {
     }
 
     private void selectImage(){
-        final CharSequence[] items = {"Camara", "Galeria", "Cancelar"};
+        final String camara = getResources().getString(R.string.camara);
+        final String galeria =  getResources().getString(R.string.galeria);
+        final String cancelar = getResources().getString(R.string.cancelar);
+
+        final CharSequence[] items = { camara, galeria,cancelar};
 
         AlertDialog.Builder adBuilder = new AlertDialog.Builder(getActivity());
-        adBuilder.setTitle("Agregar Imagen");
+        adBuilder.setTitle(R.string.agregarImagen);
         adBuilder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                if (items[i].equals("Camara")) {
+                if (items[i].equals(camara)) {
 
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(intent, REQUEST_CAMERA);
 
-                } else if (items[i].equals("Galeria")) {
+                } else if (items[i].equals(galeria)) {
 
                     Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     intent.setType("image/*");
                     startActivityForResult(intent, SELECT_FILE);
 
-                } else if (items[i].equals("Cancelar")) {
+                } else if (items[i].equals(cancelar)) {
                     dialogInterface.dismiss();
                 }
             }
