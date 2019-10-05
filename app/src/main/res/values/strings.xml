@@ -43,4 +43,10 @@
     <string name="editarPerfil">Editar Perfil</string>
     <string name="contrasena">Contraseña</string>
     <string name="guardar">Guardar Cambios</string>
+    <string name="usuarioYaExiste">El usuario ya existe</string>
+    <string name="camara">Camara</string>
+    <string name="galeria">Galeria</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="agregarImagen">Agregar Imagen</string>
+    <string name="guardado">Guardado</string>
 </resources>
