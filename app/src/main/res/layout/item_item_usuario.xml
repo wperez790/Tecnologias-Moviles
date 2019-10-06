@@ -13,7 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="@dimen/marginL">
+        android:layout_marginTop="@dimen/marginL"
+        android:fadingEdge="horizontal"
+        android:fadingEdgeLength="20dp"
+        android:fillViewport="false"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:backgroundTintMode="multiply"
+        android:requiresFadingEdge="vertical"
+        >
 
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"

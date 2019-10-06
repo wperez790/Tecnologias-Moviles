@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".LoginActivity"
-    android:background="@color/colorFondo">
+    android:background="@drawable/gradient">
+
 
     <ImageView
         android:layout_width="match_parent"
@@ -18,6 +19,7 @@
         android:id="@+id/FragmentListaUsuarios"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/marginM"/>
+        android:layout_marginTop="@dimen/marginM"
+        />
 
 </LinearLayout>

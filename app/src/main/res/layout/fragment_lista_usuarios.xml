@@ -12,7 +12,10 @@
         android:fadingEdge="horizontal"
         android:fadingEdgeLength="20dp"
         android:fillViewport="false"
-        android:requiresFadingEdge="vertical"/>
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:backgroundTintMode="multiply"
+        android:requiresFadingEdge="vertical"
+        />
 
 
 </LinearLayout>
