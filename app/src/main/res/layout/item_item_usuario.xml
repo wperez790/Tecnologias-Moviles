@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:elevation="5dp"
-    android:background="@android:color/white"
-    android:padding="@dimen/marginL"
-    android:layout_marginStart="@dimen/marginM"
-    android:layout_marginEnd="@dimen/marginM"
-    android:layout_marginBottom="@dimen/marginM"
+    android:background="@color/colorSecundary"
+    android:alpha="0.8"
+    android:layout_margin="@dimen/marginL"
+
     >
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,23 +31,26 @@
             android:src="@drawable/avatar"
             android:layout_margin="@dimen/marginL"
             app:civ_border_width="1dp"
-            app:civ_border_color="@color/blanco"
+            app:civ_border_color="@color/negro"
             />
         <TextView
             android:id="@+id/nombreUsuario"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/textM"/>
+            android:textSize="@dimen/textM"
+            android:textColor="@color/blanco"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:textColor="@color/blanco"/>
         <Button
             android:id="@+id/BtnEliminarUsuario"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Eliminar"
+            android:background="@drawable/round_button"
             style="@style/BotonBorrar"/>
     </LinearLayout>
     <TextView
@@ -55,5 +58,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/marginL"
+        android:textColor="@color/blanco"
         android:textSize="@dimen/textL"/>
 </LinearLayout>

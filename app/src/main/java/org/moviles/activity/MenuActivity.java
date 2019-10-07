@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -194,6 +195,19 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         ft.commit();
     }
 
+    private void cargarEnviarEmail() {
+
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{Constants.EMAIL_DEVELOPER});
+        i.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.asuntoPorDefecto));
+        try {
+            startActivity(Intent.createChooser(i, getResources().getString(R.string.enviarEmail)));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(MenuActivity.this, getResources().getString(R.string.noClientesEmail), Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
@@ -214,6 +228,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_edit_profile:
                 cargarEditar();
+                break;
+            case R.id.nav_email:
+            cargarEnviarEmail();
 
 
         }
@@ -222,8 +239,15 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+
+
     @Override
     public void cerrarFramgemntEditarUsuario() {
         cargarHome();
+    }
+
+    @Override
+    public void actualizarUsuario() {
+        cargarUsuario();
     }
 }

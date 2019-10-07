@@ -31,6 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:clickable="true"
+            android:backgroundTint="@color/colorSecundary"
             app:srcCompat="@drawable/ic_camera"
             android:layout_alignBottom="@+id/profile_image"
             android:layout_alignRight="@+id/profile_image"
