@@ -102,8 +102,6 @@ public class FragmentEditarUsuario extends Fragment {
 
             Util.saveImage(fl, bmp);
         }
-        Toast toast = Toast.makeText(getActivity().getApplicationContext(),R.string.guardado, Toast.LENGTH_SHORT);
-        toast.show();
 
         Usuario user = new Usuario();
         user.setUsuario(nombre.getText().toString());
@@ -127,8 +125,13 @@ public class FragmentEditarUsuario extends Fragment {
         }
 
         currentUser = user;
-        userBO.update(currentUser);
+        if(userBO.update(currentUser)){
+            Context.getUsuarioBusiness().setCurrentUser(currentUser);
+            Toast toast = Toast.makeText(getActivity().getApplicationContext(),R.string.guardado, Toast.LENGTH_SHORT);
+            toast.show();
+        }
         onclick.actualizarUsuario();
+        onclick.cerrarFramgmentEditarUsuario();
 
 
     }

@@ -17,34 +17,13 @@ public class ClimaAdapter extends RecyclerView.Adapter<ClimaAdapter.ClimaViewHol
 
     private List<Clima> climaList;
 
-    public ClimaAdapter() {
-        climaList = new ArrayList<Clima>();
+    public ClimaAdapter( List<Clima>climaList) {
+        this.climaList = climaList;
+    }
 
-        Clima aux = new Clima();
-        aux.setDia("Jueves");
-        aux.setDiaNumero(5);
-        aux.setMes("Septiembre");
-        aux.setAnio(2019);
-        aux.setCondicion("Despejado");
-        aux.setHumedad(50);
-        aux.setTemperatura(14.2);
-        aux.setViento("NE 15Km/h ");
-        aux.setDescripcion("Corre boludo a guardar el auto que cae piedra");
 
-        climaList.add(aux);
-
-        aux = new Clima();
-        aux.setDia("Vienes");
-        aux.setDiaNumero(6);
-        aux.setMes("Septiembre");
-        aux.setAnio(2019);
-        aux.setCondicion("Despejado");
-        aux.setHumedad(100);
-        aux.setTemperatura(-5.7);
-        aux.setViento("NE 30Km/h ");
-        aux.setDescripcion("te acordaste de guardar el auto?");
-
-        climaList.add(aux);
+    public List<Clima> getClimaList() {
+        return climaList;
     }
 
     @Override
