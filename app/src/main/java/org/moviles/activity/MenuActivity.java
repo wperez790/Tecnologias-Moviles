@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,14 +41,17 @@ import org.moviles.activity.Fragments.FragmentEditarUsuario;
 import org.moviles.activity.Fragments.FragmentHome;
 import org.moviles.activity.Fragments.FragmentListaUsuarios;
 import org.moviles.activity.Fragments.FragmentMap;
+import org.moviles.activity.Interfaces.IFragmentConfiguracionListener;
 import org.moviles.activity.Interfaces.IFragmentEditarUsuarioListener;
+import org.moviles.business.ConfiguracionBusiness;
+import org.moviles.model.Configuracion;
 import org.moviles.model.Usuario;
 
 import java.io.File;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IFragmentEditarUsuarioListener {
+public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IFragmentEditarUsuarioListener , IFragmentConfiguracionListener {
 
 
     private DrawerLayout drawer;
@@ -187,11 +191,24 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void cargarConfig(){
-        FragmentConfiguracion fconf = new FragmentConfiguracion();
+        FragmentConfiguracion fconf = new FragmentConfiguracion(this);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.fragment_container,fconf);
         ft.commit();
+    }
+
+    private void cargarEnviarEmail() {
+
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{Constants.EMAIL_DEVELOPER});
+        i.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.asuntoPorDefecto));
+        try {
+            startActivity(Intent.createChooser(i, getResources().getString(R.string.enviarEmail)));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(MenuActivity.this, getResources().getString(R.string.noClientesEmail), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -214,6 +231,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_edit_profile:
                 cargarEditar();
+                break;
+            case R.id.nav_email:
+            cargarEnviarEmail();
 
 
         }
@@ -222,8 +242,32 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+
+
     @Override
-    public void cerrarFramgemntEditarUsuario() {
+    public void cerrarFramgmentEditarUsuario() {
         cargarHome();
+    }
+
+    @Override
+    public void actualizarUsuario() {
+        cargarUsuario();
+    }
+
+    @Override
+    public void cerrarFramgemntConfiguracion() {cargarHome(); }
+
+    @Override
+    public void actualizarConfiguracion(Configuracion config) {
+        ConfiguracionBusiness configBO = Context.getConfiguracionBusiness();
+        String user = Context.getUsuarioBusiness().getCurrentUser().getUsuario();
+        boolean valid = configBO.save(config,user);
+        cargarHome();
+        if(valid)
+            Toast.makeText(getApplicationContext(),getString(R.string.configuracionGuardada),Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(getApplicationContext(),getString(R.string.configuracionNoGuardada),Toast.LENGTH_SHORT).show();
+
+
     }
 }

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">#1e88e5</color>
+    <color name="colorPrimaryLight">#6ab7ff</color>
+    <color name="colorPrimaryDark">#005cb2</color>
+    <!--<color name="colorSecundary">#4caf50</color>-->
+    <color name="colorSecundary">#601f70</color>
     <color name="colorAccent">#5090EE</color>
     <color name="colorFondo">#EFEFEF</color>
     <color name="agregar">#66BB6A</color>
@@ -9,4 +12,6 @@
     <color name="blanco">#FFFFFF</color>
     <color name="oscuro">#303030</color>
     <color name="rojo">#FF6969</color>
+    <color name="rojo2">#c90a00</color>
+    <color name="negro">#000000</color>
 </resources>

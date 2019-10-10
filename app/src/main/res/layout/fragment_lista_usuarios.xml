@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimaryDark">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ListaUsuarios"
@@ -12,7 +13,10 @@
         android:fadingEdge="horizontal"
         android:fadingEdgeLength="20dp"
         android:fillViewport="false"
-        android:requiresFadingEdge="vertical"/>
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:backgroundTintMode="multiply"
+        android:requiresFadingEdge="vertical"
+        />
 
 
 </LinearLayout>

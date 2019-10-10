@@ -49,4 +49,19 @@
     <string name="cancelar">Cancelar</string>
     <string name="agregarImagen">Agregar Imagen</string>
     <string name="guardado">Guardado</string>
+    <string name="Notificaciones">Notificaciones:</string>
+    <string name="activarNotificaciones">Activar Notificaciones</string>
+    <string name="unidadTemperatura">Unidad de Temperatura:</string>
+    <string name="seleccioneHoraNotificacion">Seleccione la hora de Notificación</string>
+    <string name="mailADesarrollador">Envianos un e-mail</string>
+    <string name="enviarEmail">Enviar e-mail...</string>
+    <string name="noClientesEmail">No hay clientes e-mail instalados</string>
+    <string name="asuntoPorDefecto">E-mail a Desarrollador para...</string>
+    <string name="configuracionGuardada">Configuracion Guardada</string>
+    <string name="configuracionNoGuardada">Configuracion No Guardada</string>
+    <string-array name="unidades">
+        <item>ºC</item>
+        <item>ºF</item>
+        <item>ºK</item>
+    </string-array>
 </resources>

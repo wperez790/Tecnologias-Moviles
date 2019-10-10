@@ -31,7 +31,7 @@
         <item name="android:textColor">@color/blanco</item>
         <item name="android:layout_marginStart">@dimen/marginM</item>
         <item name="android:layout_marginEnd">@dimen/marginM</item>
-        <item name="android:layout_marginTop">@dimen/marginH</item>
+
 
     </style>
 
