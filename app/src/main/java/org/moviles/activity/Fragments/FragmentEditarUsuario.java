@@ -129,7 +129,7 @@ public class FragmentEditarUsuario extends Fragment {
         currentUser = user;
         userBO.update(currentUser);
         onclick.actualizarUsuario();
-        onclick.cerrarFramgemntEditarUsuario();
+
 
     }
 

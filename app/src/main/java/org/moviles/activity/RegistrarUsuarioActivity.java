@@ -13,7 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.json.JSONObject;
 import org.moviles.Context;
 import org.moviles.Util;
+import org.moviles.business.ConfiguracionBusiness;
 import org.moviles.business.UsuarioBusiness;
+import org.moviles.model.Configuracion;
 import org.moviles.model.Usuario;
 
 import java.io.File;
@@ -64,6 +66,11 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
 
         valid = userBO.save(u);
 
+        if(valid){
+            ConfiguracionBusiness configBO = Context.getConfiguracionBusiness();
+            Configuracion conf = new Configuracion();
+            valid = configBO.save(conf,u.getUsuario());
+        }
         if(valid)
             Toast.makeText(v.getContext(),"Se creo correctamente", Toast.LENGTH_SHORT).show();
 

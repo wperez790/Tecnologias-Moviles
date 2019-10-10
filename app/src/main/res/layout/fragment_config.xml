@@ -12,11 +12,12 @@
         android:layout_marginTop="@dimen/marginL"
         android:layout_marginLeft="@dimen/marginL"
         android:text="@string/unidadTemperatura"/>
-    <TextSwitcher
+    <Spinner
+        android:id="@+id/spinnerUnidades"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        ></TextSwitcher>
+        ></Spinner>
 
     <CheckBox
         android:id="@+id/actNotificaciones"
@@ -39,6 +40,7 @@
         android:tooltipText="Seleccione Hora"/>
 
    <Button
+       android:id="@+id/btnAceptarConfiguracion"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:layout_marginBottom="@dimen/marginL"

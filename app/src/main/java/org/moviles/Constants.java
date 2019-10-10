@@ -6,5 +6,6 @@ public class Constants {
     public static final String USER_DATA_FILE = "datos.txt";
     public static final String USER_LIST_FILE = "ListaUsuarios.txt";
     public static final String USER_AVATAR = "avatar.png";
-
+    public static final String USER_CONFIG = "configuracion.txt";
+    public static final String UNIDAD_DEFAULT = "ºC";
 }

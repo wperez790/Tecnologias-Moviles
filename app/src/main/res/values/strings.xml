@@ -57,4 +57,11 @@
     <string name="enviarEmail">Enviar e-mail...</string>
     <string name="noClientesEmail">No hay clientes e-mail instalados</string>
     <string name="asuntoPorDefecto">E-mail a Desarrollador para...</string>
+    <string name="configuracionGuardada">Configuracion Guardada</string>
+    <string name="configuracionNoGuardada">Configuracion No Guardada</string>
+    <string-array name="unidades">
+        <item>ºC</item>
+        <item>ºF</item>
+        <item>ºK</item>
+    </string-array>
 </resources>

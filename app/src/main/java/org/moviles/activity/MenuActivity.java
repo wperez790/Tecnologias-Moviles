@@ -41,14 +41,17 @@ import org.moviles.activity.Fragments.FragmentEditarUsuario;
 import org.moviles.activity.Fragments.FragmentHome;
 import org.moviles.activity.Fragments.FragmentListaUsuarios;
 import org.moviles.activity.Fragments.FragmentMap;
+import org.moviles.activity.Interfaces.IFragmentConfiguracionListener;
 import org.moviles.activity.Interfaces.IFragmentEditarUsuarioListener;
+import org.moviles.business.ConfiguracionBusiness;
+import org.moviles.model.Configuracion;
 import org.moviles.model.Usuario;
 
 import java.io.File;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IFragmentEditarUsuarioListener {
+public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IFragmentEditarUsuarioListener , IFragmentConfiguracionListener {
 
 
     private DrawerLayout drawer;
@@ -188,7 +191,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void cargarConfig(){
-        FragmentConfiguracion fconf = new FragmentConfiguracion();
+        FragmentConfiguracion fconf = new FragmentConfiguracion(this);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.fragment_container,fconf);
@@ -242,12 +245,29 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
 
     @Override
-    public void cerrarFramgemntEditarUsuario() {
+    public void cerrarFramgmentEditarUsuario() {
         cargarHome();
     }
 
     @Override
     public void actualizarUsuario() {
         cargarUsuario();
+    }
+
+    @Override
+    public void cerrarFramgemntConfiguracion() {cargarHome(); }
+
+    @Override
+    public void actualizarConfiguracion(Configuracion config) {
+        ConfiguracionBusiness configBO = Context.getConfiguracionBusiness();
+        String user = Context.getUsuarioBusiness().getCurrentUser().getUsuario();
+        boolean valid = configBO.save(config,user);
+        cargarHome();
+        if(valid)
+            Toast.makeText(getApplicationContext(),getString(R.string.configuracionGuardada),Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(getApplicationContext(),getString(R.string.configuracionNoGuardada),Toast.LENGTH_SHORT).show();
+
+
     }
 }

@@ -4,18 +4,100 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.Spinner;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import org.moviles.Constants;
+import org.moviles.Context;
+import org.moviles.activity.Interfaces.IFragmentConfiguracionListener;
 import org.moviles.activity.R;
+import org.moviles.business.ConfiguracionBusiness;
+import org.moviles.model.Configuracion;
+import org.w3c.dom.Text;
 
-public class FragmentConfiguracion extends Fragment {
+public class FragmentConfiguracion extends Fragment implements AdapterView.OnItemSelectedListener{
+
+    private TimePicker timePicker;
+    private String unidad;
+    private CheckBox checkBoxNotificaciones;
+    private Spinner spinner;
+    private IFragmentConfiguracionListener onclick ;
+
+    public FragmentConfiguracion(IFragmentConfiguracionListener onclick){
+        this.onclick = onclick;
+    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_config,container,false);
-        return view;
+        final View contenedor = inflater.inflate(R.layout.fragment_config,container,false);
+
+
+        spinner = contenedor.findViewById(R.id.spinnerUnidades);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(contenedor.getContext(), R.array.unidades,android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+
+        checkBoxNotificaciones = contenedor.findViewById(R.id.actNotificaciones);
+        timePicker = contenedor.findViewById(R.id.timePicker);
+
+        Button btnAceptar = contenedor.findViewById(R.id.btnAceptarConfiguracion);
+        btnAceptar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                guardarConfiguracion();
+            }
+        });
+
+        cargarConfiguracion();
+
+
+
+        return contenedor;
+    }
+
+    private void cargarConfiguracion() {
+
+        ConfiguracionBusiness configBO = Context.getConfiguracionBusiness();
+        String user = Context.getUsuarioBusiness().getCurrentUser().getUsuario();
+        Configuracion config =  configBO.getConfiguracion(user);
+        checkBoxNotificaciones.setActivated(config.isNotificaciones());
+        if(config.isNotificaciones()) {
+            String[] aux = config.getHora().split(":");
+            timePicker.setHour(Integer.parseInt(aux[0]));
+            timePicker.setMinute(Integer.parseInt(aux[1]));
+        }
+
+    }
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        unidad = parent.getItemAtPosition(position).toString();
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        unidad = Constants.UNIDAD_DEFAULT;
+    }
+    private void guardarConfiguracion(){
+        Configuracion config = new Configuracion();
+        config.setHora(timePicker.getHour()+":"+timePicker.getMinute());
+        config.setNotificaciones(checkBoxNotificaciones.isActivated());
+        config.setUnidad(unidad);
+        onclick.actualizarConfiguracion(config);
+        onclick.cerrarFramgemntConfiguracion();
+
+
     }
 }
