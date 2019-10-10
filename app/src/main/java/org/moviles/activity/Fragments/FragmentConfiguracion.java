@@ -23,6 +23,9 @@ import org.moviles.business.ConfiguracionBusiness;
 import org.moviles.model.Configuracion;
 import org.w3c.dom.Text;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class FragmentConfiguracion extends Fragment implements AdapterView.OnItemSelectedListener{
 
     private TimePicker timePicker;
@@ -48,6 +51,7 @@ public class FragmentConfiguracion extends Fragment implements AdapterView.OnIte
 
         checkBoxNotificaciones = contenedor.findViewById(R.id.actNotificaciones);
         timePicker = contenedor.findViewById(R.id.timePicker);
+        timePicker.setIs24HourView(true);
 
         Button btnAceptar = contenedor.findViewById(R.id.btnAceptarConfiguracion);
         btnAceptar.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +74,16 @@ public class FragmentConfiguracion extends Fragment implements AdapterView.OnIte
         ConfiguracionBusiness configBO = Context.getConfiguracionBusiness();
         String user = Context.getUsuarioBusiness().getCurrentUser().getUsuario();
         Configuracion config =  configBO.getConfiguracion(user);
-        checkBoxNotificaciones.setActivated(config.isNotificaciones());
+        unidad = config.getUnidad();
+        List <String> array = Arrays.asList(getResources().getStringArray(R.array.unidades));
+        /*Selecciono cual es el objeto del spinner para setear al cargar*/
+        for(int i = 0 ; i < array.size() ; i++) {
+            if (array.get(i).equals(unidad))
+                spinner.setSelection(i);
+        }
+
+
+        checkBoxNotificaciones.setChecked(config.isNotificaciones());
         if(config.isNotificaciones()) {
             String[] aux = config.getHora().split(":");
             timePicker.setHour(Integer.parseInt(aux[0]));
@@ -93,10 +106,9 @@ public class FragmentConfiguracion extends Fragment implements AdapterView.OnIte
     private void guardarConfiguracion(){
         Configuracion config = new Configuracion();
         config.setHora(timePicker.getHour()+":"+timePicker.getMinute());
-        config.setNotificaciones(checkBoxNotificaciones.isActivated());
+        config.setNotificaciones(checkBoxNotificaciones.isChecked());
         config.setUnidad(unidad);
         onclick.actualizarConfiguracion(config);
-        onclick.cerrarFramgemntConfiguracion();
 
 
     }
