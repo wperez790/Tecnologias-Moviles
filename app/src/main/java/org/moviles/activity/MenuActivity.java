@@ -128,7 +128,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         Usuario user = Context.getUsuarioBusiness().getCurrentUser();
         nombreUsuarioMenu.setText(user.getUsuario());
         emailUsuarioMenu.setText(user.getEmail());
-
         File img = new File(Context.getDataDir(),user.getUsuario()+"/"+ Constants.USER_AVATAR);
         Bitmap bmp = Util.getImage(img);
         avatar.setImageBitmap(bmp);
