@@ -21,7 +21,7 @@ public class ConfiguracionDAO implements IConfiguracionDAO {
         String json = Util.readFile(userConfigFile);
 
         return getFromJSON(json);*/
-        Configuracion configuracion = null;
+        Configuracion configuracion = new Configuracion();
         configuracion.setUnidad(preferencesUtils.getSharedPreferences().getString(Constants.USER_UNITY,"no tiene Unidad definida"));
         configuracion.setHora(preferencesUtils.getSharedPreferences().getString(Constants.USER_TIME,"no tiene tiempo definido"));
         configuracion.setNotificaciones(preferencesUtils.getSharedPreferences().getBoolean(Constants.USER_NOTIFICATION,false));
