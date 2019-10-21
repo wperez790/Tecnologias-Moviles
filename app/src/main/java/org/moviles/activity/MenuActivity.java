@@ -34,6 +34,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.moviles.Constants;
 import org.moviles.Context;
+import org.moviles.PreferencesUtils;
 import org.moviles.Util;
 import org.moviles.activity.Fragments.FragmentClimaExtendido;
 import org.moviles.activity.Fragments.FragmentConfiguracion;
@@ -260,7 +261,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     public void actualizarConfiguracion(Configuracion config) {
         ConfiguracionBusiness configBO = Context.getConfiguracionBusiness();
         String user = Context.getUsuarioBusiness().getCurrentUser().getUsuario();
-        boolean valid = configBO.save(config,user);
+        PreferencesUtils preferencesUtils = new PreferencesUtils(getApplicationContext());
+        boolean valid = configBO.save(config,user, preferencesUtils);
         cargarHome();
         if(valid)
             Toast.makeText(getApplicationContext(),getString(R.string.configuracionGuardada),Toast.LENGTH_SHORT).show();

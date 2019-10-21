@@ -10,17 +10,13 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.json.JSONObject;
 import org.moviles.Context;
+import org.moviles.PreferencesUtils;
 import org.moviles.Util;
 import org.moviles.business.ConfiguracionBusiness;
 import org.moviles.business.UsuarioBusiness;
 import org.moviles.model.Configuracion;
 import org.moviles.model.Usuario;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.util.List;
 
 public class RegistrarUsuarioActivity extends AppCompatActivity {
 
@@ -69,7 +65,8 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
         if(valid){
             ConfiguracionBusiness configBO = Context.getConfiguracionBusiness();
             Configuracion conf = new Configuracion();
-            valid = configBO.save(conf,u.getUsuario());
+            PreferencesUtils preferencesUtils = new PreferencesUtils(getApplicationContext());
+            valid = configBO.save(conf,u.getUsuario(), preferencesUtils);
         }
         if(valid)
             Toast.makeText(v.getContext(),"Se creo correctamente", Toast.LENGTH_SHORT).show();

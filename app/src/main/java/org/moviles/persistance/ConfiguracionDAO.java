@@ -3,6 +3,7 @@ package org.moviles.persistance;
 import org.json.JSONObject;
 import org.moviles.Constants;
 import org.moviles.Context;
+import org.moviles.PreferencesUtils;
 import org.moviles.Util;
 import org.moviles.model.Configuracion;
 
@@ -10,24 +11,43 @@ import java.io.File;
 
 public class ConfiguracionDAO implements IConfiguracionDAO {
     @Override
-    public Configuracion getConfiguracion(String user) {
-        File userConfigFile = new File(Context.getDataDir(),
+    public Configuracion getConfiguracion(String user , PreferencesUtils preferencesUtils) {
+        /*Antigua forma de obtener configuraciones
+        /*File userConfigFile = new File(Context.getDataDir(),
                 user + "/" + Constants.USER_CONFIG);
         if(!userConfigFile.exists())
             return null;
 
         String json = Util.readFile(userConfigFile);
 
-        return getFromJSON(json);
+        return getFromJSON(json);*/
+        Configuracion configuracion = null;
+        configuracion.setUnidad(preferencesUtils.getSharedPreferences().getString(Constants.USER_UNITY,"no tiene Unidad definida"));
+        configuracion.setHora(preferencesUtils.getSharedPreferences().getString(Constants.USER_TIME,"no tiene tiempo definido"));
+        configuracion.setNotificaciones(preferencesUtils.getSharedPreferences().getBoolean(Constants.USER_NOTIFICATION,false));
+        return configuracion;
     }
 
     @Override
-    public boolean save(Configuracion config, String user) {
-        String json = getJSON(config);
+    public boolean save(Configuracion config, String user, PreferencesUtils preferencesUtils) {
+        /*Antigua Forma de guardar preferences
+        /*String json = getJSON(config);
         File file = new File(Context.getDataDir(),
                 user+"/"+Constants.USER_CONFIG);
 
-        return Util.writeFile(file,json);
+        return Util.writeFile(file,json);*/
+        try{
+            preferencesUtils.setNotification(config.isNotificaciones());
+            preferencesUtils.setTime(config.getHora());
+            preferencesUtils.setUnity(config.getUnidad());
+            return true;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+
+
     }
 
     public Configuracion getFromJSON(String jsonConfig){

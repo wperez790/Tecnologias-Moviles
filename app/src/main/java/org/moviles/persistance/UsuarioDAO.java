@@ -18,6 +18,8 @@ public class UsuarioDAO implements IUsuarioDAO {
                 user.getUsuario()+"/"+Constants.USER_DATA_FILE);
 
         return Util.writeFile(file,json);
+
+
     }
 
     public Usuario getUsuario(String username) {
