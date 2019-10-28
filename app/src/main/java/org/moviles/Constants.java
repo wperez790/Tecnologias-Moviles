@@ -12,4 +12,5 @@ public class Constants {
     public static final String USER_UNITY = "user_unidad";
     public static final String USER_NOTIFICATION = "user_notification";
     public static final String USER_TIME = "user_time";
+    public static final int VERSION_DATABASE_CLIMA = 1;
 }

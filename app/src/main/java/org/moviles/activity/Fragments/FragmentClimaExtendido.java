@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.moviles.activity.Adapters.ClimaAdapter;
 import org.moviles.activity.R;
 import org.moviles.model.Clima;
+import org.moviles.persistance.ClimaRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,8 @@ public class FragmentClimaExtendido extends Fragment {
         aux.setViento("NE 15Km/h ");
         aux.setDescripcion("Cielo despejado, baja probabilidad de lluvias, vientos leves");
 
+        ClimaRepository climaRepository = new ClimaRepository(getActivity().getApplication());
+
         climaList.add(aux);
 
         aux = new Clima();
@@ -65,5 +68,6 @@ public class FragmentClimaExtendido extends Fragment {
 
         climaList.add(aux);
 
+        climaRepository.insertAllClimas(climaList);
     }
 }

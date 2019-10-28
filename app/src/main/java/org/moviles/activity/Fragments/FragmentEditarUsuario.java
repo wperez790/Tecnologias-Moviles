@@ -107,6 +107,8 @@ public class FragmentEditarUsuario extends Fragment {
         user.setUsuario(nombre.getText().toString());
         user.setPassword(password.getText().toString());
         user.setEmail(correo.getText().toString());
+        user.setFotoPerfil(bmp);
+        //user.setFechaNacimiento("A COMPLETAR");
         boolean valid = Util.checkUser(getActivity().getApplicationContext(),currentUser);
 
         if(!valid)

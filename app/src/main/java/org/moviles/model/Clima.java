@@ -1,6 +1,18 @@
 package org.moviles.model;
 
-public class Clima {
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "climas")
+public class Clima{
+
+    @PrimaryKey
+    @NonNull
+    @ColumnInfo(name = "id_clima")
+    private int id;
+
     private String dia;
     private Integer diaNumero;
     private String mes;
@@ -10,6 +22,15 @@ public class Clima {
     private Integer humedad;
     private String condicion;
     private String viento;
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getDia() {
         return dia;
