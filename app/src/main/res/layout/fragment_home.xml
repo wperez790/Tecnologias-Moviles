@@ -25,6 +25,7 @@
         android:layout_margin="@dimen/marginM"/>
 
     <TextView
+        android:id="@+id/descripcionBreve"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/logoL"
@@ -32,7 +33,7 @@
         android:textColor="@color/blanco"
         android:text="Despejado"/>
 
-    <View
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"/>
@@ -76,6 +77,7 @@
                     />
 
                 <TextView
+                    android:id="@+id/vientoVelocidad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/blanco"
@@ -103,6 +105,7 @@
                 />
 
             <TextView
+                android:id="@+id/humedad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/textM"
@@ -131,6 +134,7 @@
                 />
 
             <TextView
+                android:id="@+id/descripcionDetallada"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/textM"

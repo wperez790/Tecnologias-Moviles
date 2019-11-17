@@ -12,5 +12,7 @@ public class Constants {
     public static final String USER_UNITY = "user_unidad";
     public static final String USER_NOTIFICATION = "user_notification";
     public static final String USER_TIME = "user_time";
+    public static final String API_KEY = "823c636a17593b4cc52526e50e9d2ff0";
     public static final int VERSION_DATABASE_CLIMA = 1;
+    public static String API_UNITS = "metric";
 }

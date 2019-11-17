@@ -9,7 +9,6 @@ import android.provider.MediaStore;
 import android.widget.Toast;
 
 import org.moviles.activity.R;
-import org.moviles.business.UsuarioBusiness;
 import org.moviles.model.Usuario;
 
 import java.io.BufferedReader;
@@ -18,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.regex.Pattern;
+
 
 public class Util {
 
@@ -154,4 +154,37 @@ public class Util {
         return true;
     }
 
+
+    public static String getMesString(int mes) {
+
+        Context c = org.moviles.Context.getContext();
+        switch (mes){
+            case 1:
+                return c.getString(R.string.Enero);
+            case 2:
+                return c.getString(R.string.Febrero);
+            case 3:
+                return c.getString(R.string.Marzo);
+            case 4:
+                return c.getString(R.string.Abril);
+            case 5:
+                return c.getString(R.string.Mayo);
+            case 6:
+                return c.getString(R.string.Junio);
+            case 7:
+                return c.getString(R.string.Julio);
+            case 8:
+                return c.getString(R.string.Agosto);
+            case 9:
+                return c.getString(R.string.Septiembre);
+            case 10:
+                return c.getString(R.string.Octubre);
+            case 11:
+                return c.getString(R.string.Noviembre);
+            case 12:
+                return c.getString(R.string.Diciembre);
+            default:
+                return "";
+        }
+    }
 }

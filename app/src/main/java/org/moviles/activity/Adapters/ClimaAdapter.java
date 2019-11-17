@@ -40,7 +40,7 @@ public class ClimaAdapter extends RecyclerView.Adapter<ClimaAdapter.ClimaViewHol
         holder.getDiaCondicion().setText(aux.getCondicion());
         holder.getDiaHumedad().setText(aux.getHumedad().toString());
         holder.getDiaTemp().setText(aux.getTemperatura().toString());
-        holder.getDiaViento().setText(aux.getViento());
+        holder.getDiaViento().setText(aux.getVientoVelocidad().toString());
         holder.getDiaDescripcion().setText(aux.getDescripcion());
     }
 

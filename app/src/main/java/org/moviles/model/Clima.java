@@ -19,10 +19,45 @@ public class Clima{
     private Integer anio;
     private String descripcion;
     private Double temperatura;
-    private Integer humedad;
+    private Double tempMax;
+    private Double tempMin;
+    private Double humedad;
     private String condicion;
-    private String viento;
+    private Double vientoVelocidad;
+    private Double vientoDireccion;
 
+
+    public Double getVientoVelocidad() {
+        return vientoVelocidad;
+    }
+
+    public void setVientoVelocidad(Double vientoVelocidad) {
+        this.vientoVelocidad = vientoVelocidad;
+    }
+
+    public Double getVientoDireccion() {
+        return vientoDireccion;
+    }
+
+    public void setVientoDireccion(Double vientoDireccion) {
+        this.vientoDireccion = vientoDireccion;
+    }
+
+    public Double getTempMax() {
+        return tempMax;
+    }
+
+    public void setTempMax(Double tempMax) {
+        this.tempMax = tempMax;
+    }
+
+    public Double getTempMin() {
+        return tempMin;
+    }
+
+    public void setTempMin(Double tempMin) {
+        this.tempMin = tempMin;
+    }
 
     public int getId() {
         return id;
@@ -72,11 +107,11 @@ public class Clima{
         this.temperatura = temperatura;
     }
 
-    public Integer getHumedad() {
+    public Double getHumedad() {
         return humedad;
     }
 
-    public void setHumedad(Integer humedad) {
+    public void setHumedad(Double humedad) {
         this.humedad = humedad;
     }
 
@@ -86,14 +121,6 @@ public class Clima{
 
     public void setCondicion(String condicion) {
         this.condicion = condicion;
-    }
-
-    public String getViento() {
-        return viento;
-    }
-
-    public void setViento(String viento) {
-        this.viento = viento;
     }
 
     public Integer getDiaNumero() {

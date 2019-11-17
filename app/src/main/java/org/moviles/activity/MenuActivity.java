@@ -1,23 +1,20 @@
 package org.moviles.activity;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,9 +25,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
 import org.moviles.Constants;
 import org.moviles.Context;
@@ -40,15 +36,25 @@ import org.moviles.activity.Fragments.FragmentClimaExtendido;
 import org.moviles.activity.Fragments.FragmentConfiguracion;
 import org.moviles.activity.Fragments.FragmentEditarUsuario;
 import org.moviles.activity.Fragments.FragmentHome;
-import org.moviles.activity.Fragments.FragmentListaUsuarios;
 import org.moviles.activity.Fragments.FragmentMap;
 import org.moviles.activity.Interfaces.IFragmentConfiguracionListener;
 import org.moviles.activity.Interfaces.IFragmentEditarUsuarioListener;
 import org.moviles.business.ConfiguracionBusiness;
+import org.moviles.dto.ClimaDTO;
+import org.moviles.model.Clima;
 import org.moviles.model.Configuracion;
 import org.moviles.model.Usuario;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -57,16 +63,18 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout drawer;
     private FrameLayout fragmentContainer;
+    private FragmentTransaction fragmentTransaction;
     private TextView nombreUsuarioMenu;
     private TextView emailUsuarioMenu;
     private CircleImageView avatar;
-
+    private static Gson gson;
+    private static Clima climaActual;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
+        Context.setContext(getApplicationContext());
         setTitle("Menu");
 
         fragmentContainer = findViewById(R.id.fragment_container);
@@ -88,6 +96,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView.setNavigationItemSelectedListener(this);
 
+        getFromApi();
+
         FragmentHome  fh = new FragmentHome();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
@@ -95,9 +105,21 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         ft.commit();
 
         toggle.syncState();
-
     }
 
+
+    private void getFromApi(){
+        if (isNetworkConnected()) {
+            try {
+                climaActual = new DownloadInfoClimaTask().execute("Córdoba").get();
+                Context.clima = climaActual;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 
     @Override
@@ -160,6 +182,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         FragmentHome  fhome = new FragmentHome();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
+        /*Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("fragment_home", list);
+        fhome.setArguments(bundle);*/
         ft.replace(R.id.fragment_container,fhome);
         ft.commit();
     }
@@ -263,6 +288,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         String user = Context.getUsuarioBusiness().getCurrentUser().getUsuario();
         PreferencesUtils preferencesUtils = new PreferencesUtils(getApplicationContext());
         boolean valid = configBO.save(config,user, preferencesUtils);
+        getFromApi();
         cargarHome();
         if(valid)
             Toast.makeText(getApplicationContext(),getString(R.string.configuracionGuardada),Toast.LENGTH_SHORT).show();
@@ -271,4 +297,103 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
 
     }
+
+
+    // Método que chequea si hay conexión a Internet.
+    private boolean isNetworkConnected() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(android.content.Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        boolean connected = false;
+        if(networkInfo != null && networkInfo.isConnected())
+            connected = true;
+        else
+            showDialogNoInternet();
+
+        return connected;
+    }
+
+    private void showDialogNoInternet(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.no_internet)
+                .setPositiveButton(R.string.reintentar, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        isNetworkConnected();
+                    }
+                })
+                .setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Agregar que queremos que ocurra si se presiona el Negative Button.
+                    }
+                })
+                .setTitle("Atención!")
+                .create();
+        builder.show();
+    }
+    /*private Clima getClimaByLocation(){
+
+    }*/
+    private  Clima  getClimaByCity(String city) throws IOException {
+        InputStream source = retrieveStreamByCity(city);
+
+        String res =  convertStreamToString(source);
+
+        Gson gson = new Gson();
+        ClimaDTO climaDTO = gson.fromJson(res,ClimaDTO.class);
+        Clima clima = climaDTO.getClima();
+            return clima;
+
+    }
+
+    private static String convertStreamToString(InputStream inputStream) {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        StringBuilder stringBuilder = new StringBuilder();
+        String line;
+        try {
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line).append('\n');
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
+    }
+
+    private InputStream retrieveStreamByCity(String city) throws IOException {
+        URL url = null;
+
+        try {
+            url = new URL("https://api.openweathermap.org/data/2.5/weather?q=" + city +"&units="+Constants.API_UNITS+"&appid="+Constants.API_KEY);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        return new BufferedInputStream(connection.getInputStream());
+    }
+
+
+    private class DownloadInfoClimaTask extends AsyncTask<String, Void, Clima>{
+
+        @Override
+        protected Clima doInBackground(String... cities) {
+            try {
+                return getClimaByCity(cities[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Clima clima) {
+            super.onPostExecute(clima);
+            cargarHome();
+        }
+    }
+
+
 }

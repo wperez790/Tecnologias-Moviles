@@ -46,9 +46,9 @@ public class FragmentClimaExtendido extends Fragment {
         aux.setMes("Septiembre");
         aux.setAnio(2019);
         aux.setCondicion("Despejado");
-        aux.setHumedad(50);
+        aux.setHumedad(50.0);
         aux.setTemperatura(14.2);
-        aux.setViento("NE 15Km/h ");
+        aux.setVientoVelocidad(25.0);
         aux.setDescripcion("Cielo despejado, baja probabilidad de lluvias, vientos leves");
 
         ClimaRepository climaRepository = new ClimaRepository(getActivity().getApplication());
@@ -61,9 +61,9 @@ public class FragmentClimaExtendido extends Fragment {
         aux.setMes("Septiembre");
         aux.setAnio(2019);
         aux.setCondicion("Nublado");
-        aux.setHumedad(100);
+        aux.setHumedad(100.0);
         aux.setTemperatura(-5.7);
-        aux.setViento("NE 30Km/h ");
+        aux.setVientoVelocidad(30.0);
         aux.setDescripcion("Cielo nublado, alta probabilidad de lluvias, vientos leves a moderados");
 
         climaList.add(aux);

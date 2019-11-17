@@ -78,10 +78,10 @@ public class FragmentConfiguracion extends Fragment implements AdapterView.OnIte
         PreferencesUtils preferencesUtils = new PreferencesUtils(getActivity().getApplicationContext());
         Configuracion config =  configBO.getConfiguracion(user, preferencesUtils);
         unidad = config.getUnidad();
-        List <String> array = Arrays.asList(getResources().getStringArray(R.array.unidades));
+        List <String> arrayUnidades = Arrays.asList(getResources().getStringArray(R.array.unidades));
         /*Selecciono cual es el objeto del spinner para setear al cargar*/
-        for(int i = 0 ; i < array.size() ; i++) {
-            if (array.get(i).equals(unidad))
+        for(int i = 0 ; i < arrayUnidades.size() ; i++) {
+            if (arrayUnidades.get(i).equals(unidad))
                 spinner.setSelection(i);
         }
 
@@ -113,6 +113,7 @@ public class FragmentConfiguracion extends Fragment implements AdapterView.OnIte
         config.setHora(timePicker.getHour()+":"+timePicker.getMinute());
         config.setNotificaciones(checkBoxNotificaciones.isChecked());
         config.setUnidad(unidad);
+        Constants.API_UNITS = unidad.split(" ")[0];
         onclick.actualizarConfiguracion(config);
 
 
