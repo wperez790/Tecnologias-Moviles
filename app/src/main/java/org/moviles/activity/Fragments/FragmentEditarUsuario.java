@@ -1,13 +1,16 @@
 package org.moviles.activity.Fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -17,6 +20,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -25,6 +30,7 @@ import org.moviles.Constants;
 import org.moviles.Context;
 import org.moviles.Util;
 import org.moviles.activity.Interfaces.IFragmentEditarUsuarioListener;
+import org.moviles.activity.MenuActivity;
 import org.moviles.activity.R;
 import org.moviles.business.UsuarioBusiness;
 import org.moviles.model.Usuario;
@@ -38,6 +44,7 @@ public class FragmentEditarUsuario extends Fragment {
 
     private static final int REQUEST_CAMERA = 1;
     private static final int SELECT_FILE = 2 ;
+    private boolean permisos = false;
     private CircleImageView imgPerfil;
     private EditText nombre;
     private EditText correo;
@@ -152,15 +159,16 @@ public class FragmentEditarUsuario extends Fragment {
             public void onClick(DialogInterface dialogInterface, int i) {
 
                 if (items[i].equals(camara)) {
-
+                    requestPermissionsCamera();
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(intent, REQUEST_CAMERA);
 
                 } else if (items[i].equals(galeria)) {
-
+                    requestPermissionsGallery();
                     Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     intent.setType("image/*");
                     startActivityForResult(intent, SELECT_FILE);
+
 
                 } else if (items[i].equals(cancelar)) {
                     dialogInterface.dismiss();
@@ -195,4 +203,28 @@ public class FragmentEditarUsuario extends Fragment {
 
         }
     }
+
+    public void requestPermissionsCamera(){
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) !=
+                PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            ActivityCompat.requestPermissions(this.getActivity(),
+                    new String[]{Manifest.permission.CAMERA},
+                    PackageManager.GET_PERMISSIONS);
+        }
+
+
+    }
+    public void requestPermissionsGallery(){
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) !=
+                PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    PackageManager.GET_PERMISSIONS);
+        }
+
+    }
+
+
 }

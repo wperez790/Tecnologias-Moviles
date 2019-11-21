@@ -1,58 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient">
+    android:background="@drawable/gradient"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/ciudad"
+        style="@style/textoCentradoM"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/textM"
         android:alpha="0.8"
+        android:text="Córdoba"
         android:textColor="@color/blanco"
-        style="@style/textoCentradoM"
-        android:text="Córdoba"/>
+        android:textSize="@dimen/textM" />
 
     <TextView
         android:id="@+id/textoTemperatura"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/blanco"
+        android:layout_margin="@dimen/marginM"
         android:alpha="0.8"
-        android:textSize="@dimen/textH"
-        android:text="20 °C"
-        android:layout_margin="@dimen/marginM"/>
+        android:textColor="@color/blanco"
+        android:textSize="@dimen/textH" />
+
+    <TextView
+        android:id="@+id/textoTemperaturaMax"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/marginM"
+        android:alpha="0.8"
+        android:textColor="@color/blanco"
+        android:textSize="@dimen/textL" />
+
+    <TextView
+        android:id="@+id/textoTemperaturaMin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/marginM"
+        android:alpha="0.8"
+        android:textColor="@color/blanco"
+        android:textSize="@dimen/textL" />
 
     <TextView
         android:id="@+id/descripcionBreve"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/logoL"
-        android:textSize="@dimen/textM"
+        android:text="Despejado"
         android:textColor="@color/blanco"
-        android:text="Despejado"/>
+        android:textSize="@dimen/textM" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_margin="@dimen/marginM"
-        android:alpha="0.8">
-        
+        android:alpha="0.8"
+        android:orientation="vertical">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/blanco"
-            android:textSize="@dimen/textM"
+            android:layout_margin="@dimen/marginL"
             android:text="Detalles"
-            android:layout_margin="@dimen/marginL"/>
-        
+            android:textColor="@color/blanco"
+            android:textSize="@dimen/textM" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,84 +82,77 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/blanco"
-                    android:textSize="@dimen/textM"
-                    android:text="Viento"
                     android:layout_margin="@dimen/marginL"
-                    />
+                    android:text="Viento"
+                    android:textColor="@color/blanco"
+                    android:textSize="@dimen/textM" />
 
                 <TextView
                     android:id="@+id/vientoVelocidad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/blanco"
-                    android:textSize="@dimen/textM"
-                    android:text="9.3 Km/h"
                     android:layout_margin="@dimen/marginL"
-                    />
+                    android:textColor="@color/blanco"
+                    android:textSize="@dimen/textM" />
 
             </LinearLayout>
 
             <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-                android:textColor="@color/blanco"
-            android:layout_weight="0.5"
-            android:orientation="vertical">
-
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/blanco"
-                android:textSize="@dimen/textM"
-                android:text="Humedad"
-                android:layout_margin="@dimen/marginL"
-                />
+                android:layout_weight="0.5"
+                android:orientation="vertical"
+                android:background="@drawable/border"
+                android:textColor="@color/blanco">
 
-            <TextView
-                android:id="@+id/humedad"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/textM"
-                android:text="60%"
-                android:textColor="@color/blanco"
-                android:layout_margin="@dimen/marginL"
-                />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/marginL"
+                    android:text="Humedad"
+                    android:textColor="@color/blanco"
+                    android:textSize="@dimen/textM" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/humedad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/marginL"
+                    android:textColor="@color/blanco"
+                    android:textSize="@dimen/textM" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="@dimen/marginM">
+            android:layout_marginTop="@dimen/marginM"
+            android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/textM"
-                android:text="Descripcion"
                 android:layout_margin="@dimen/marginL"
-                android:textColor="@color/blanco"
+                android:text="Descripcion"
                 android:textAlignment="center"
-                />
+                android:textColor="@color/blanco"
+                android:textSize="@dimen/textM" />
 
             <TextView
                 android:id="@+id/descripcionDetallada"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/textM"
-                android:textColor="@color/blanco"
-                android:text="Despejado clara visibilidad, vientos leves."
                 android:layout_margin="@dimen/marginL"
-                />
+                android:text="Despejado clara visibilidad, vientos leves."
+                android:textColor="@color/blanco"
+                android:textSize="@dimen/textM" />
 
         </LinearLayout>
 

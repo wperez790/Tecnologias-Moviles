@@ -1,8 +1,13 @@
 package org.moviles.activity;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -19,15 +24,21 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 
+import org.moviles.ClimaLocationListener;
 import org.moviles.Constants;
 import org.moviles.Context;
 import org.moviles.PreferencesUtils;
@@ -39,8 +50,10 @@ import org.moviles.activity.Fragments.FragmentHome;
 import org.moviles.activity.Fragments.FragmentMap;
 import org.moviles.activity.Interfaces.IFragmentConfiguracionListener;
 import org.moviles.activity.Interfaces.IFragmentEditarUsuarioListener;
+import org.moviles.business.ClimaBusiness;
 import org.moviles.business.ConfiguracionBusiness;
 import org.moviles.dto.ClimaDTO;
+import org.moviles.dto.ClimaListDTO;
 import org.moviles.model.Clima;
 import org.moviles.model.Configuracion;
 import org.moviles.model.Usuario;
@@ -54,11 +67,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IFragmentEditarUsuarioListener , IFragmentConfiguracionListener {
+public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IFragmentEditarUsuarioListener, IFragmentConfiguracionListener {
 
 
     private DrawerLayout drawer;
@@ -69,6 +83,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private CircleImageView avatar;
     private static Gson gson;
     private static Clima climaActual;
+    private static List<Clima> climaListActual;
+    private ClimaBusiness cBO;
+    private Location loc;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,6 +93,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_menu);
         Context.setContext(getApplicationContext());
         setTitle("Menu");
+
+        cBO = Context.getClimaBusiness(getApplication());
 
         fragmentContainer = findViewById(R.id.fragment_container);
 
@@ -91,31 +110,60 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer, toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
 
         navigationView.setNavigationItemSelectedListener(this);
 
         getFromApi();
 
-        FragmentHome  fh = new FragmentHome();
+        FragmentHome fh = new FragmentHome();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.fragment_container,fh);
+        ft.replace(R.id.fragment_container, fh);
         ft.commit();
 
         toggle.syncState();
     }
 
 
-    private void getFromApi(){
+    private void getFromApi() {
         if (isNetworkConnected()) {
             try {
                 climaActual = new DownloadInfoClimaTask().execute("Córdoba").get();
-                Context.clima = climaActual;
+                Context.clima= climaActual;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            try {
+                loadLastFromDataBase();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void getLastDaysFromApi(){
+        if (isNetworkConnected()) {
+            try {
+                climaListActual = new DownloadInfoListClimaTask().execute("Córdoba").get();
+                Context.climaList = climaListActual;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            try {
+                loadLastFromDataBase();
+            }
+            catch(Exception e){
                 e.printStackTrace();
             }
         }
@@ -124,17 +172,17 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        if(drawer.isDrawerOpen(GravityCompat.START)){
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             FragmentManager fragmentManager = getSupportFragmentManager();
             Fragment f = fragmentManager.findFragmentById(R.id.fragment_container);
-            if(!(f instanceof FragmentHome)) {
+            if (!(f instanceof FragmentHome)) {
                 cargarHome();
                 return;
             }
 
-            if(!Context.getUsuarioBusiness().isMantenerSesion())
+            if (!Context.getUsuarioBusiness().isMantenerSesion())
                 Context.getUsuarioBusiness().setCurrentUser(null);
             super.onBackPressed();
         }
@@ -142,28 +190,28 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onDestroy() {
-        if(!Context.getUsuarioBusiness().isMantenerSesion())
+        if (!Context.getUsuarioBusiness().isMantenerSesion())
             Context.getUsuarioBusiness().setCurrentUser(null);
         super.onDestroy();
     }
 
-    private void cargarUsuario(){
+    private void cargarUsuario() {
         Usuario user = Context.getUsuarioBusiness().getCurrentUser();
         nombreUsuarioMenu.setText(user.getUsuario());
         emailUsuarioMenu.setText(user.getEmail());
-        File img = new File(Context.getDataDir(),user.getUsuario()+"/"+ Constants.USER_AVATAR);
+        File img = new File(Context.getDataDir(), user.getUsuario() + "/" + Constants.USER_AVATAR);
         Bitmap bmp = Util.getImage(img);
         avatar.setImageBitmap(bmp);
     }
 
-    private void cerrarSesion(){
+    private void cerrarSesion() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.cerrarSesionMensaje)
                 .setPositiveButton(R.string.ACEPTAR, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if(!Context.getUsuarioBusiness().setCurrentUser(null))
+                        if (!Context.getUsuarioBusiness().setCurrentUser(null))
                             return;
-                        Intent i = new Intent(MenuActivity.this,LoginActivity.class);
+                        Intent i = new Intent(MenuActivity.this, LoginActivity.class);
                         startActivity(i);
                         finish();
                     }
@@ -178,48 +226,49 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         builder.show();
     }
 
-    private void cargarHome(){
-        FragmentHome  fhome = new FragmentHome();
+    private void cargarHome() {
+        FragmentHome fhome = new FragmentHome();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         /*Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("fragment_home", list);
         fhome.setArguments(bundle);*/
-        ft.replace(R.id.fragment_container,fhome);
+        ft.replace(R.id.fragment_container, fhome);
         ft.commit();
     }
 
-    private void cargarEditar(){
-        FragmentEditarUsuario  fEdit = new FragmentEditarUsuario(this);
+    private void cargarEditar() {
+        FragmentEditarUsuario fEdit = new FragmentEditarUsuario(this);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.fragment_container,fEdit);
+        ft.replace(R.id.fragment_container, fEdit);
         ft.commit();
 
 
     }
 
-    private void cargarDetalle(){
+    private void cargarDetalle() {
+        getLastDaysFromApi();
         FragmentClimaExtendido fce = new FragmentClimaExtendido();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.fragment_container,fce);
+        ft.replace(R.id.fragment_container, fce);
         ft.commit();
     }
 
-    private void cargarMapa(){
+    private void cargarMapa() {
         FragmentMap fmap = new FragmentMap();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.fragment_container,fmap);
+        ft.replace(R.id.fragment_container, fmap);
         ft.commit();
     }
 
-    private void cargarConfig(){
+    private void cargarConfig() {
         FragmentConfiguracion fconf = new FragmentConfiguracion(this);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.fragment_container,fconf);
+        ft.replace(R.id.fragment_container, fconf);
         ft.commit();
     }
 
@@ -227,7 +276,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("message/rfc822");
-        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{Constants.EMAIL_DEVELOPER});
+        i.putExtra(Intent.EXTRA_EMAIL, new String[]{Constants.EMAIL_DEVELOPER});
         i.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.asuntoPorDefecto));
         try {
             startActivity(Intent.createChooser(i, getResources().getString(R.string.enviarEmail)));
@@ -238,7 +287,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()){
+        switch (menuItem.getItemId()) {
             case R.id.nav_logout:
                 cerrarSesion();
                 break;
@@ -258,7 +307,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 cargarEditar();
                 break;
             case R.id.nav_email:
-            cargarEnviarEmail();
+                cargarEnviarEmail();
 
 
         }
@@ -266,7 +315,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 
 
     @Override
@@ -280,20 +328,22 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void cerrarFramgemntConfiguracion() {cargarHome(); }
+    public void cerrarFramgemntConfiguracion() {
+        cargarHome();
+    }
 
     @Override
     public void actualizarConfiguracion(Configuracion config) {
         ConfiguracionBusiness configBO = Context.getConfiguracionBusiness();
         String user = Context.getUsuarioBusiness().getCurrentUser().getUsuario();
         PreferencesUtils preferencesUtils = new PreferencesUtils(getApplicationContext());
-        boolean valid = configBO.save(config,user, preferencesUtils);
+        boolean valid = configBO.save(config, user, preferencesUtils);
         getFromApi();
         cargarHome();
-        if(valid)
-            Toast.makeText(getApplicationContext(),getString(R.string.configuracionGuardada),Toast.LENGTH_SHORT).show();
+        if (valid)
+            Toast.makeText(getApplicationContext(), getString(R.string.configuracionGuardada), Toast.LENGTH_SHORT).show();
         else
-            Toast.makeText(getApplicationContext(),getString(R.string.configuracionNoGuardada),Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.configuracionNoGuardada), Toast.LENGTH_SHORT).show();
 
 
     }
@@ -305,12 +355,57 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
         boolean connected = false;
-        if(networkInfo != null && networkInfo.isConnected())
+        if (networkInfo != null && networkInfo.isConnected())
             connected = true;
-        else
+        else {
             showDialogNoInternet();
 
+        }
+
         return connected;
+    }
+
+    private void loadLastFromDataBase() {
+        Location location = getLastLocation();
+        Clima c =null;
+        if(location!=null)
+            c = cBO.getClimaByLocation(location);
+        if (c == null)
+            c = cBO.getClimaByCity("Córdoba");
+        if (c != null)
+            Context.setClima(c);
+
+
+    }
+
+    public Location getLastLocation() {
+        requestPermissionsLocation();
+        if(ActivityCompat.checkSelfPermission(MenuActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            return null;
+        }
+        FusedLocationProviderClient fusedLocationClient;
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            loc= location;
+                        }
+                    }
+                });
+        return loc;
+    }
+
+
+
+    public void requestPermissionsLocation() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    PackageManager.GET_PERMISSIONS);
+        }
     }
 
     private void showDialogNoInternet(){
@@ -326,7 +421,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 .setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //Agregar que queremos que ocurra si se presiona el Negative Button.
+
                     }
                 })
                 .setTitle("Atención!")
@@ -344,8 +439,25 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         Gson gson = new Gson();
         ClimaDTO climaDTO = gson.fromJson(res,ClimaDTO.class);
         Clima clima = climaDTO.getClima();
+        Context.setClima(clima);
+        ClimaBusiness cBO =  Context.getClimaBusiness(getApplication());
+        cBO.insert(clima);
             return clima;
 
+    }
+    private List<Clima> getClimaListByCity(String city) throws IOException {
+
+        InputStream source = retrieveStreamListByCity(city);
+
+        String res =  convertStreamToString(source);
+
+        Gson gson = new Gson();
+        ClimaListDTO climaListDTO = gson.fromJson(res,ClimaListDTO.class);
+        List<Clima> climaList = climaListDTO.getListClima();
+        Context.setClimaList(climaList);
+        ClimaBusiness cBO =  Context.getClimaBusiness(getApplication());
+        cBO.insertClimas(climaList);
+        return climaList;
     }
 
     private static String convertStreamToString(InputStream inputStream) {
@@ -366,7 +478,20 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         URL url = null;
 
         try {
-            url = new URL("https://api.openweathermap.org/data/2.5/weather?q=" + city +"&units="+Constants.API_UNITS+"&appid="+Constants.API_KEY);
+            url = new URL("https://api.openweathermap.org/data/2.5/weather?q=" + city +"&units="+Constants.API_UNITS+"&lang=es&appid="+Constants.API_KEY);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        return new BufferedInputStream(connection.getInputStream());
+    }
+
+    private InputStream retrieveStreamListByCity(String city) throws IOException {
+        URL url = null;
+
+        try {
+            url = new URL("https://api.openweathermap.org/data/2.5/forecast?q=" + city +"&units="+Constants.API_UNITS+"&cnt="+Constants.CANTIDAD_DEFAULT+"&lang=es&appid="+Constants.API_KEY);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -394,6 +519,27 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             cargarHome();
         }
     }
+
+    private class DownloadInfoListClimaTask extends AsyncTask<String, Void, List<Clima>>{
+
+        @Override
+        protected List<Clima> doInBackground(String... cities) {
+            try {
+                return getClimaListByCity(cities[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<Clima> climaList) {
+            super.onPostExecute(climaList);
+            cargarDetalle();
+        }
+    }
+
+
 
 
 }

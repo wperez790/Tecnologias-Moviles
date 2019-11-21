@@ -72,9 +72,9 @@ public class FragmentConfiguracion extends Fragment implements AdapterView.OnIte
     }
 
     private void cargarConfiguracion() {
+        String user = Context.getUsuarioBusiness().getCurrentUser().getUsuario();
 
         ConfiguracionBusiness configBO = Context.getConfiguracionBusiness();
-        String user = Context.getUsuarioBusiness().getCurrentUser().getUsuario();
         PreferencesUtils preferencesUtils = new PreferencesUtils(getActivity().getApplicationContext());
         Configuracion config =  configBO.getConfiguracion(user, preferencesUtils);
         unidad = config.getUnidad();

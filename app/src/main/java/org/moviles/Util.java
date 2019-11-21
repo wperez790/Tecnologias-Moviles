@@ -155,7 +155,7 @@ public class Util {
     }
 
 
-    public static String getMesString(int mes) {
+    public static String getMesString(Integer mes) {
 
         Context c = org.moviles.Context.getContext();
         switch (mes){

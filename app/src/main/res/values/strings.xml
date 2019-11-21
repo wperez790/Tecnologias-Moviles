@@ -73,6 +73,10 @@
     <string name="Octubre">Octubre</string>
     <string name="Noviembre">Noviembre</string>
     <string name="Diciembre">Diciembre</string>
+    <string name="channel_description">Description</string>
+    <string name="notification_message">mensaje</string>
+    <string name="temperaturaMaxima">T.Máx:</string>
+    <string name="temperaturaMinima">T.Mín:</string>
     <string-array name="unidades">
         <item>metric (ºC)</item>
         <item>imperial (ºF)</item>

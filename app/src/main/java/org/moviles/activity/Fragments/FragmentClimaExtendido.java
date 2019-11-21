@@ -12,8 +12,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.moviles.Constants;
+import org.moviles.Context;
 import org.moviles.activity.Adapters.ClimaAdapter;
 import org.moviles.activity.R;
+import org.moviles.business.ClimaBusiness;
 import org.moviles.model.Clima;
 import org.moviles.persistance.ClimaRepository;
 
@@ -38,7 +41,14 @@ public class FragmentClimaExtendido extends Fragment {
 
     private void cargarLista() {
 
-        climaList = new ArrayList<Clima>();
+
+        ClimaBusiness cBO = Context.getClimaBusiness(getActivity().getApplication());
+
+        if(Context.getClimaList()==null)
+            climaList = cBO.getLastDays(Constants.CANTIDAD_DEFAULT);
+        else
+            climaList = Context.getClimaList();
+        /*climaList = new ArrayList<Clima>();
 
         Clima aux = new Clima();
         aux.setDia("Jueves");
@@ -50,9 +60,9 @@ public class FragmentClimaExtendido extends Fragment {
         aux.setTemperatura(14.2);
         aux.setVientoVelocidad(25.0);
         aux.setDescripcion("Cielo despejado, baja probabilidad de lluvias, vientos leves");
-
+        /**/
         ClimaRepository climaRepository = new ClimaRepository(getActivity().getApplication());
-
+        /*
         climaList.add(aux);
 
         aux = new Clima();
@@ -67,7 +77,7 @@ public class FragmentClimaExtendido extends Fragment {
         aux.setDescripcion("Cielo nublado, alta probabilidad de lluvias, vientos leves a moderados");
 
         climaList.add(aux);
-
+        */
         climaRepository.insertAllClimas(climaList);
     }
 }

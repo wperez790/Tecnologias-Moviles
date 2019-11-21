@@ -5,6 +5,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.sql.Timestamp;
+
 @Entity(tableName = "climas")
 public class Clima{
 
@@ -25,7 +27,51 @@ public class Clima{
     private String condicion;
     private Double vientoVelocidad;
     private Double vientoDireccion;
+    private String ciudad;
+    private String pais;
+    private String coordLon;
+    private String coordLat;
+    private Long timestamp;
 
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
+    }
+
+    public String getPais() {
+        return pais;
+    }
+
+    public void setPais(String pais) {
+        this.pais = pais;
+    }
+
+    public String getCoordLon() {
+        return coordLon;
+    }
+
+    public void setCoordLon(String coordLon) {
+        this.coordLon = coordLon;
+    }
+
+    public String getCoordLat() {
+        return coordLat;
+    }
+
+    public void setCoordLat(String coordLat) {
+        this.coordLat = coordLat;
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
 
     public Double getVientoVelocidad() {
         return vientoVelocidad;
@@ -130,4 +176,6 @@ public class Clima{
     public void setDiaNumero(Integer diaNumero) {
         this.diaNumero = diaNumero;
     }
+
+
 }
