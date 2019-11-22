@@ -476,9 +476,13 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
     private InputStream retrieveStreamByCity(String city) throws IOException {
         URL url = null;
-
+        ConfiguracionBusiness configBO = Context.getConfiguracionBusiness();
+        String user = Context.getUsuarioBusiness().getCurrentUser().getUsuario();
+        PreferencesUtils preferencesUtils = new PreferencesUtils(getApplicationContext());
+        Configuracion config = configBO.getConfiguracion(user, preferencesUtils);
+        String unidad=  config.getUnidad().split(" ")[0];
         try {
-            url = new URL("https://api.openweathermap.org/data/2.5/weather?q=" + city +"&units="+Constants.API_UNITS+"&lang=es&appid="+Constants.API_KEY);
+            url = new URL("https://api.openweathermap.org/data/2.5/weather?q=" + city +"&units="+unidad+"&lang=es&appid="+Constants.API_KEY);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -489,9 +493,13 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
     private InputStream retrieveStreamListByCity(String city) throws IOException {
         URL url = null;
-
+        ConfiguracionBusiness configBO = Context.getConfiguracionBusiness();
+        String user = Context.getUsuarioBusiness().getCurrentUser().getUsuario();
+        PreferencesUtils preferencesUtils = new PreferencesUtils(getApplicationContext());
+        Configuracion config = configBO.getConfiguracion(user, preferencesUtils);
+        String unidad=  config.getUnidad().split(" ")[0];
         try {
-            url = new URL("https://api.openweathermap.org/data/2.5/forecast?q=" + city +"&units="+Constants.API_UNITS+"&cnt="+Constants.CANTIDAD_DEFAULT+"&lang=es&appid="+Constants.API_KEY);
+            url = new URL("https://api.openweathermap.org/data/2.5/forecast?q=" + city +"&units="+unidad+"&cnt="+Constants.CANTIDAD_DEFAULT+"&lang=es&appid="+Constants.API_KEY);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
