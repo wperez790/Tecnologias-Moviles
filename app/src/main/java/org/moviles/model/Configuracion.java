@@ -22,6 +22,7 @@ public class Configuracion {
         this.unidad = unidad;
     }
 
+
     public boolean isNotificaciones() {
         return notificaciones;
     }
@@ -30,6 +31,7 @@ public class Configuracion {
         this.notificaciones = notificaciones;
     }
 
+
     public String getHora() {
         return hora;
     }
@@ -37,4 +39,5 @@ public class Configuracion {
     public void setHora(String hora) {
         this.hora = hora;
     }
+
 }

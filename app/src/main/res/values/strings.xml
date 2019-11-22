@@ -59,9 +59,27 @@
     <string name="asuntoPorDefecto">E-mail a Desarrollador para...</string>
     <string name="configuracionGuardada">Configuracion Guardada</string>
     <string name="configuracionNoGuardada">Configuracion No Guardada</string>
+    <string name="no_internet">No hay conexión a internet</string>
+    <string name="reintentar">Reintentar</string>
+    <string name="Enero">Enero</string>
+    <string name="Febrero">Febrero</string>
+    <string name="Marzo">Marzo</string>
+    <string name="Abril">Abril</string>
+    <string name="Mayo">Mayo</string>
+    <string name="Junio">Junio</string>
+    <string name="Julio">Julio</string>
+    <string name="Agosto">Agosto</string>
+    <string name="Septiembre">Septiembre</string>
+    <string name="Octubre">Octubre</string>
+    <string name="Noviembre">Noviembre</string>
+    <string name="Diciembre">Diciembre</string>
+    <string name="channel_description">Description</string>
+    <string name="notification_message">mensaje</string>
+    <string name="temperaturaMaxima">T.Máx:</string>
+    <string name="temperaturaMinima">T.Mín:</string>
     <string-array name="unidades">
-        <item>ºC</item>
-        <item>ºF</item>
-        <item>ºK</item>
+        <item>metric (ºC)</item>
+        <item>imperial (ºF)</item>
+        <item>standard (ºK)</item>
     </string-array>
 </resources>

@@ -17,12 +17,14 @@ import androidx.fragment.app.Fragment;
 
 import org.moviles.Constants;
 import org.moviles.Context;
+import org.moviles.PreferencesUtils;
 import org.moviles.activity.Interfaces.IFragmentConfiguracionListener;
 import org.moviles.activity.R;
 import org.moviles.business.ConfiguracionBusiness;
 import org.moviles.model.Configuracion;
 import org.w3c.dom.Text;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
@@ -70,15 +72,16 @@ public class FragmentConfiguracion extends Fragment implements AdapterView.OnIte
     }
 
     private void cargarConfiguracion() {
+        String user = Context.getUsuarioBusiness().getCurrentUser().getUsuario();
 
         ConfiguracionBusiness configBO = Context.getConfiguracionBusiness();
-        String user = Context.getUsuarioBusiness().getCurrentUser().getUsuario();
-        Configuracion config =  configBO.getConfiguracion(user);
+        PreferencesUtils preferencesUtils = new PreferencesUtils(getActivity().getApplicationContext());
+        Configuracion config =  configBO.getConfiguracion(user, preferencesUtils);
         unidad = config.getUnidad();
-        List <String> array = Arrays.asList(getResources().getStringArray(R.array.unidades));
+        List <String> arrayUnidades = Arrays.asList(getResources().getStringArray(R.array.unidades));
         /*Selecciono cual es el objeto del spinner para setear al cargar*/
-        for(int i = 0 ; i < array.size() ; i++) {
-            if (array.get(i).equals(unidad))
+        for(int i = 0 ; i < arrayUnidades.size() ; i++) {
+            if (arrayUnidades.get(i).equals(unidad))
                 spinner.setSelection(i);
         }
 
@@ -103,11 +106,14 @@ public class FragmentConfiguracion extends Fragment implements AdapterView.OnIte
     public void onNothingSelected(AdapterView<?> parent) {
         unidad = Constants.UNIDAD_DEFAULT;
     }
+
+
     private void guardarConfiguracion(){
         Configuracion config = new Configuracion();
         config.setHora(timePicker.getHour()+":"+timePicker.getMinute());
         config.setNotificaciones(checkBoxNotificaciones.isChecked());
         config.setUnidad(unidad);
+        Constants.API_UNITS = unidad.split(" ")[0];
         onclick.actualizarConfiguracion(config);
 
 

@@ -8,4 +8,13 @@ public class Constants {
     public static final String USER_AVATAR = "avatar.png";
     public static final String USER_CONFIG = "configuracion.txt";
     public static final String UNIDAD_DEFAULT = "ºC";
+    public static final String PREFS_NAME = "org.moviles.persistance.prefs";
+    public static final String USER_UNITY = "user_unidad";
+    public static final String USER_NOTIFICATION = "user_notification";
+    public static final String USER_TIME = "user_time";
+    public static final String API_KEY = "823c636a17593b4cc52526e50e9d2ff0";
+    public static final int VERSION_DATABASE_CLIMA = 1;
+    public static final int CANTIDAD_DEFAULT = 7;
+    public static String API_UNITS = "metric";
+    public static final String NOTIFICATION_CHANNEL_ID = "channel_notifications";
 }

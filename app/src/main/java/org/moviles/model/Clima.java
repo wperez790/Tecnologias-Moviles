@@ -1,15 +1,117 @@
 package org.moviles.model;
 
-public class Clima {
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import java.sql.Timestamp;
+
+@Entity(tableName = "climas")
+public class Clima{
+
+    @PrimaryKey
+    @NonNull
+    @ColumnInfo(name = "id_clima")
+    private int id;
+
     private String dia;
     private Integer diaNumero;
     private String mes;
     private Integer anio;
     private String descripcion;
     private Double temperatura;
-    private Integer humedad;
+    private Double tempMax;
+    private Double tempMin;
+    private Double humedad;
     private String condicion;
-    private String viento;
+    private Double vientoVelocidad;
+    private Double vientoDireccion;
+    private String ciudad;
+    private String pais;
+    private String coordLon;
+    private String coordLat;
+    private Long timestamp;
+
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
+    }
+
+    public String getPais() {
+        return pais;
+    }
+
+    public void setPais(String pais) {
+        this.pais = pais;
+    }
+
+    public String getCoordLon() {
+        return coordLon;
+    }
+
+    public void setCoordLon(String coordLon) {
+        this.coordLon = coordLon;
+    }
+
+    public String getCoordLat() {
+        return coordLat;
+    }
+
+    public void setCoordLat(String coordLat) {
+        this.coordLat = coordLat;
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public Double getVientoVelocidad() {
+        return vientoVelocidad;
+    }
+
+    public void setVientoVelocidad(Double vientoVelocidad) {
+        this.vientoVelocidad = vientoVelocidad;
+    }
+
+    public Double getVientoDireccion() {
+        return vientoDireccion;
+    }
+
+    public void setVientoDireccion(Double vientoDireccion) {
+        this.vientoDireccion = vientoDireccion;
+    }
+
+    public Double getTempMax() {
+        return tempMax;
+    }
+
+    public void setTempMax(Double tempMax) {
+        this.tempMax = tempMax;
+    }
+
+    public Double getTempMin() {
+        return tempMin;
+    }
+
+    public void setTempMin(Double tempMin) {
+        this.tempMin = tempMin;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getDia() {
         return dia;
@@ -51,11 +153,11 @@ public class Clima {
         this.temperatura = temperatura;
     }
 
-    public Integer getHumedad() {
+    public Double getHumedad() {
         return humedad;
     }
 
-    public void setHumedad(Integer humedad) {
+    public void setHumedad(Double humedad) {
         this.humedad = humedad;
     }
 
@@ -67,14 +169,6 @@ public class Clima {
         this.condicion = condicion;
     }
 
-    public String getViento() {
-        return viento;
-    }
-
-    public void setViento(String viento) {
-        this.viento = viento;
-    }
-
     public Integer getDiaNumero() {
         return diaNumero;
     }
@@ -82,4 +176,6 @@ public class Clima {
     public void setDiaNumero(Integer diaNumero) {
         this.diaNumero = diaNumero;
     }
+
+
 }

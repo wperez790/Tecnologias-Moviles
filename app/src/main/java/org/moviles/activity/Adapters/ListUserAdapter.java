@@ -1,26 +1,20 @@
 package org.moviles.activity.Adapters;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.json.JSONObject;
 import org.moviles.Constants;
 import org.moviles.Context;
 import org.moviles.Util;
 import org.moviles.activity.Interfaces.ListaUsuarioRecyclerViewOnItemClickListener;
-import org.moviles.activity.LoginActivity;
-import org.moviles.activity.LoginActivityBackup;
 import org.moviles.activity.R;
-import org.moviles.activity.RegistrarUsuarioActivity;
 import org.moviles.model.Usuario;
 
 import java.io.File;
