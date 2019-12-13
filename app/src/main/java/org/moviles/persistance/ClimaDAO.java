@@ -16,7 +16,7 @@ import java.util.List;
 public interface ClimaDAO {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    Boolean insert(Clima clima);
+    void insert(Clima clima);
 
     @Query("DELETE FROM climas")
     void deleteAll();
