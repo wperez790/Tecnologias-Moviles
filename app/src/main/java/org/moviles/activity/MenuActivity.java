@@ -37,6 +37,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
+import com.mapbox.mapboxsdk.Mapbox;
 
 import org.moviles.ClimaLocationListener;
 import org.moviles.Constants;
@@ -257,10 +258,12 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void cargarMapa() {
+        Mapbox.getInstance(this,"sk.eyJ1Ijoid2FsdGVyZ2FicmllbHBzIiwiYSI6ImNrNDNpaWF1ZjA4YzQzbnJxdjRodGNreTcifQ.ORR58GVx7OiEzHIUEMxsgA");
         FragmentMap fmap = new FragmentMap();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.fragment_container, fmap);
+
         ft.commit();
     }
 
