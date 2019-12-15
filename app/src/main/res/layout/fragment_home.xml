@@ -72,8 +72,8 @@
 
             <ImageView
                 android:id="@+id/imageWeather"
-                android:layout_width="@dimen/logoH"
-                android:layout_height="@dimen/logoH" />
+                android:layout_width="@dimen/logoVH"
+                android:layout_height="@dimen/logoVH" />
 
             <TextView
                 android:id="@+id/descripcionDetallada"

@@ -84,7 +84,7 @@ public class FragmentHome extends Fragment {
                 break;
             case "Drizzle": draw =  getResources().getDrawable(R.drawable.ic_rainy_2, getContext().getTheme());
                 break;
-                
+
         }
         return draw;
 

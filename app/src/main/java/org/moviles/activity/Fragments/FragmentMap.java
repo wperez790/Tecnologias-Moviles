@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,15 +33,19 @@ public class FragmentMap extends Fragment {
     private MapView mapView;
     private Handler handler;
     private Runnable runnable;
+    private ImageButton buttonSearch;
     private static final String ID_IMAGE_SOURCE = "animated_image_source";
     private static final String ID_IMAGE_LAYER = "animated_image_layer";
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map,container,false);
-
+        buttonSearch =  view.findViewById(R.id.buttonSearch);
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
+
+
+
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(@NonNull MapboxMap mapboxMap) {
