@@ -15,6 +15,7 @@ public class Constants {
     public static final String API_KEY = "823c636a17593b4cc52526e50e9d2ff0";
     public static final int VERSION_DATABASE_CLIMA = 1;
     public static final int CANTIDAD_DEFAULT = 7;
+    public static final String MAPBOX_TOKEN = "sk.eyJ1Ijoid2FsdGVyZ2FicmllbHBzIiwiYSI6ImNrNDNpaWF1ZjA4YzQzbnJxdjRodGNreTcifQ.ORR58GVx7OiEzHIUEMxsgA";
     public static String API_UNITS = "metric";
     public static final String NOTIFICATION_CHANNEL_ID = "channel_notifications";
 }

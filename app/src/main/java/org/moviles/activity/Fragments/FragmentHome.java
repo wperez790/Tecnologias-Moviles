@@ -1,10 +1,12 @@
 package org.moviles.activity.Fragments;
 
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,6 +34,7 @@ public class FragmentHome extends Fragment {
     private TextView humedadTextView;
     private TextView descripcionBTextView;
     private TextView descripcionDTextView;
+    private ImageView imageWeather;
     ConfiguracionBusiness configuracionBusiness;
     String unidadViento;
     String unidadTemp;
@@ -61,9 +64,21 @@ public class FragmentHome extends Fragment {
         descripcionBTextView.setText(clima.getDescripcion());
         descripcionDTextView= contenedor.findViewById(R.id.descripcionDetallada);
         descripcionDTextView.setText(clima.getCondicion());
+        imageWeather = contenedor.findViewById(R.id.imageWeather);
+        imageWeather.setImageDrawable(getImageByDescription(clima.getCondicion()));
 
 
         return contenedor;
+    }
+
+    private Drawable getImageByDescription(String descripcion) {
+        Drawable draw = getResources().getDrawable(R.drawable.ic_map, getContext().getTheme());
+        switch (descripcion){
+            case "Thunderstorm": draw = getResources().getDrawable(R.drawable.ic_thunder, getContext().getTheme());
+            break;
+        }
+        return draw;
+
     }
 
     private void defineUnits(String unidad) {

@@ -258,7 +258,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void cargarMapa() {
-        Mapbox.getInstance(this,"sk.eyJ1Ijoid2FsdGVyZ2FicmllbHBzIiwiYSI6ImNrNDNpaWF1ZjA4YzQzbnJxdjRodGNreTcifQ.ORR58GVx7OiEzHIUEMxsgA");
+        Mapbox.getInstance(this,Constants.MAPBOX_TOKEN);
         FragmentMap fmap = new FragmentMap();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
