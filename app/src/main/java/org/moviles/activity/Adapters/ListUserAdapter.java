@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.moviles.Constants;
-import org.moviles.Context;
+import org.moviles.Contexto;
 import org.moviles.Util;
 import org.moviles.activity.Interfaces.ListaUsuarioRecyclerViewOnItemClickListener;
 import org.moviles.activity.R;
@@ -54,7 +54,7 @@ public class ListUserAdapter extends RecyclerView.Adapter<ListUserAdapter.ListUs
 
             //Cargar imagen de perfil
             String username = lista.get(position).getUsuario();
-            File fl = new File(Context.getDataDir(),
+            File fl = new File(Contexto.getDataDir(),
                     username+"/"+ Constants.USER_AVATAR);
             if(fl.exists()){
                 Bitmap bmp = Util.getImage(fl);

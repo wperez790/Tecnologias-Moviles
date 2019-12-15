@@ -157,7 +157,7 @@ public class Util {
 
     public static String getMesString(Integer mes) {
 
-        Context c = org.moviles.Context.getContext();
+        Context c = Contexto.getContext();
         switch (mes){
             case 1:
                 return c.getString(R.string.Enero);

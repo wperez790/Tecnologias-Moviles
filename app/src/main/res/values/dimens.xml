@@ -1,6 +1,7 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="logoH">80dp</dimen>
+    <dimen name="logoVH">160dp</dimen>
     <dimen name="logoM">40dp</dimen>
     <dimen name="logoL">15dp</dimen>
     <dimen name="textH">35dp</dimen>

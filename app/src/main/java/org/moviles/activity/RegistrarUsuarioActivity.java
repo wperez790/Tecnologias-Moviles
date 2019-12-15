@@ -10,7 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.moviles.Context;
+import org.moviles.Contexto;
 import org.moviles.PreferencesUtils;
 import org.moviles.Util;
 import org.moviles.business.ConfiguracionBusiness;
@@ -54,7 +54,7 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
         if(!valid)
             return;
 
-        UsuarioBusiness userBO = Context.getUsuarioBusiness();
+        UsuarioBusiness userBO = Contexto.getUsuarioBusiness();
         if(userBO.getUsuario(nuevoUsuario.getText().toString()) != null){
             Toast.makeText(v.getContext(),"El usuario ya existe", Toast.LENGTH_SHORT).show();
             return;
@@ -63,7 +63,7 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
         valid = userBO.save(u);
 
         if(valid){
-            ConfiguracionBusiness configBO = Context.getConfiguracionBusiness();
+            ConfiguracionBusiness configBO = Contexto.getConfiguracionBusiness();
             Configuracion conf = new Configuracion();
             PreferencesUtils preferencesUtils = new PreferencesUtils(getApplicationContext());
             valid = configBO.save(conf,u.getUsuario(), preferencesUtils);

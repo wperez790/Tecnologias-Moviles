@@ -77,6 +77,7 @@
     <string name="notification_message">mensaje</string>
     <string name="temperaturaMaxima">T.Máx:</string>
     <string name="temperaturaMinima">T.Mín:</string>
+    <string name="buscar">Buscar</string>
     <string-array name="unidades">
         <item>metric (ºC)</item>
         <item>imperial (ºF)</item>

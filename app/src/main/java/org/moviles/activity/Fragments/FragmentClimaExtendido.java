@@ -13,14 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.moviles.Constants;
-import org.moviles.Context;
+import org.moviles.Contexto;
 import org.moviles.activity.Adapters.ClimaAdapter;
 import org.moviles.activity.R;
 import org.moviles.business.ClimaBusiness;
 import org.moviles.model.Clima;
 import org.moviles.persistance.ClimaRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentClimaExtendido extends Fragment {
@@ -42,12 +41,12 @@ public class FragmentClimaExtendido extends Fragment {
     private void cargarLista() {
 
 
-        ClimaBusiness cBO = Context.getClimaBusiness(getActivity().getApplication());
+        ClimaBusiness cBO = Contexto.getClimaBusiness(getActivity().getApplication());
 
-        if(Context.getClimaList()==null)
+        if(Contexto.getClimaList()==null)
             climaList = cBO.getLastDays(Constants.CANTIDAD_DEFAULT);
         else
-            climaList = Context.getClimaList();
+            climaList = Contexto.getClimaList();
         /*climaList = new ArrayList<Clima>();
 
         Clima aux = new Clima();

@@ -6,13 +6,11 @@ import org.moviles.business.ClimaBusiness;
 import org.moviles.business.ConfiguracionBusiness;
 import org.moviles.business.UsuarioBusiness;
 import org.moviles.model.Clima;
-import org.moviles.persistance.ClimaRepository;
-import org.moviles.persistance.ClimaRoomDatabase;
 
 import java.io.File;
 import java.util.List;
 
-public class Context {
+public class Contexto {
     public static List<Clima> climaList;
     private static UsuarioBusiness usuarioBusiness;
     private static File dataDir;
@@ -66,6 +64,6 @@ public class Context {
     }
 
     public static void setClimaList(List<Clima> climaList) {
-        Context.climaList = climaList;
+        Contexto.climaList = climaList;
     }
 }

@@ -56,9 +56,7 @@ public class ClimaRepository {
 
     public void insertAllClimas (List<Clima> climas){
         try{
-            for (int i = 0; i<climas.size(); i++){
-                new insertClimasAsyncTask(climaDAO).execute(climas.get(i));
-            }
+                new insertAllClimasAsyncTask(climaDAO).execute(climas);
 
         }
         catch (Exception e){
@@ -125,6 +123,7 @@ public class ClimaRepository {
         protected Void doInBackground(Clima... climas) {
             asyncTaskClimaDao.insert(climas[0]);
             return null;
+
         }
     }
 
@@ -168,6 +167,24 @@ public class ClimaRepository {
         @Override
         protected List<Clima> doInBackground(Integer... integers) {
             return asyncTaskClimaDao.getLastClimas(integers[0]);
+        }
+    }
+
+    private class insertAllClimasAsyncTask extends AsyncTask <List<Clima>, Void, Void>{
+
+        private ClimaDAO asyncTaskClimaDao;
+
+        public insertAllClimasAsyncTask(ClimaDAO climaDAO) {
+            asyncTaskClimaDao = climaDAO;
+        }
+
+        @Override
+        protected Void doInBackground(List<Clima>... lists) {
+
+            for (int i = 0; i < lists[0].size(); i++) {
+                asyncTaskClimaDao.insert(lists[0].get(i));
+            }
+            return null;
         }
     }
 }

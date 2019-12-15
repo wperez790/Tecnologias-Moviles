@@ -2,14 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.moviles.activity">
 
-    <!--<uses-permission android:name="android.permision.CAMERA"></uses-permission>
-    <uses-permission android:name="android.permision.READ_EXTERNAL_STORAGE"></uses-permission>-->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permision.WRITE_EXTERNAL_STORAGE"></uses-permission>
-    <uses-permission android:name="android.permision.MEDIA_CONTENT_CONTROL"></uses-permission>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permision.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permision.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permision.MEDIA_CONTENT_CONTROL" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -36,6 +36,10 @@
 
         <activity android:name="org.moviles.activity.RegistrarUsuarioActivity"
             android:parentActivityName="org.moviles.activity.LoginActivity"></activity>
+
+        <!-- Register the Alarm Receiver -->
+        <receiver android:name="org.moviles.Receiver" android:enabled="true"> <intent-filter>
+            <action android:name="android.intent.action.BOOT_COMPLETED" /> </intent-filter> </receiver>
 
     </application>
 

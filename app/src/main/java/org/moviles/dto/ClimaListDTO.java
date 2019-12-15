@@ -11,8 +11,8 @@ public class ClimaListDTO {
 
     public List<Clima> getListClima(){
         List<Clima> lclima = new ArrayList<>();
-        for(ClimaDTO climadto:list){
-            lclima.add(climadto.getClima());
+       for(ClimaDTO climadto:list){
+            lclima.add(climadto.getClima(true));
         }
         return lclima;
     }

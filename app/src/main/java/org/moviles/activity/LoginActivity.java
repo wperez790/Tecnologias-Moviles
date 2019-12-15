@@ -11,8 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import org.json.JSONObject;
-import org.moviles.Context;
+import org.moviles.Contexto;
 import org.moviles.Util;
 import org.moviles.activity.Fragments.FragmentIngresarContraseña;
 import org.moviles.activity.Fragments.FragmentListaUsuarios;
@@ -20,10 +19,6 @@ import org.moviles.activity.Interfaces.ListaUsuarioRecyclerViewOnItemClickListen
 import org.moviles.business.UsuarioBusiness;
 import org.moviles.model.Usuario;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity implements ListaUsuarioRecyclerViewOnItemClickListener {
@@ -76,7 +71,7 @@ public class LoginActivity extends AppCompatActivity implements ListaUsuarioRecy
     }
 
     public void cargarLista(){
-        usersList = Context.getUsuarioBusiness().getListaUsuarios();
+        usersList = Contexto.getUsuarioBusiness().getListaUsuarios();
 
         Usuario aux = new Usuario();
         try {
@@ -124,7 +119,7 @@ public class LoginActivity extends AppCompatActivity implements ListaUsuarioRecy
 
     public void borrarUsuario(int position){
 
-        boolean valid = Util.deleteFileOnPath(Context.getDataDir(),
+        boolean valid = Util.deleteFileOnPath(Contexto.getDataDir(),
                 usersList.get(position).getUsuario());
 
         if(!valid){
@@ -134,7 +129,7 @@ public class LoginActivity extends AppCompatActivity implements ListaUsuarioRecy
 
         usersList.remove(position);
         usersList.remove(0);
-        Context.getUsuarioBusiness().setListaUsuarios(usersList);
+        Contexto.getUsuarioBusiness().setListaUsuarios(usersList);
         cargarLista();
 
         cargarFragmentoLista(false);
@@ -143,7 +138,7 @@ public class LoginActivity extends AppCompatActivity implements ListaUsuarioRecy
 
     @Override
     public void onClickIngresar(String user, String password, boolean mantenerSesion){
-        UsuarioBusiness userBO = Context.getUsuarioBusiness();
+        UsuarioBusiness userBO = Contexto.getUsuarioBusiness();
         Usuario u = userBO.getUsuario(user);
         if(!u.getPassword().equals(password)){
             Toast.makeText(getApplicationContext(),

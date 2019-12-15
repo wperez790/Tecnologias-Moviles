@@ -2,7 +2,7 @@ package org.moviles.persistance;
 
 import org.json.JSONObject;
 import org.moviles.Constants;
-import org.moviles.Context;
+import org.moviles.Contexto;
 import org.moviles.Util;
 import org.moviles.model.Usuario;
 
@@ -14,7 +14,7 @@ public class UsuarioDAO implements IUsuarioDAO {
 
     public boolean save(Usuario user) {
         String json = getJSON(user);
-        File file = new File(Context.getDataDir(),
+        File file = new File(Contexto.getDataDir(),
                 user.getUsuario()+"/"+Constants.USER_DATA_FILE);
 
         return Util.writeFile(file,json);
@@ -23,7 +23,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     public Usuario getUsuario(String username) {
-        File userData = new File(Context.getDataDir(),
+        File userData = new File(Contexto.getDataDir(),
                 username + "/" + Constants.USER_DATA_FILE);
         if(!userData.exists())
             return null;
@@ -35,7 +35,7 @@ public class UsuarioDAO implements IUsuarioDAO {
 
     public List<Usuario> getListaUsuarios() {
         List<Usuario> out = new ArrayList<Usuario>();
-        File file = new File(Context.getDataDir(), Constants.USER_LIST_FILE);
+        File file = new File(Contexto.getDataDir(), Constants.USER_LIST_FILE);
         String[] list = Util.readFile(file).split("\n");
         if(list[0].equals("")){
             return out;
@@ -49,7 +49,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     public boolean setListaUsuarios(List<Usuario> list){
-        File file = new File(Context.getDataDir(), Constants.USER_LIST_FILE);
+        File file = new File(Contexto.getDataDir(), Constants.USER_LIST_FILE);
         String listTxt = "";
         for(int i = 0; i < list.size(); i++){
             listTxt += list.get(i).getUsuario() + "\n";
@@ -59,7 +59,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     public Usuario getCurrentUser(){
-        File loged = new File(Context.getDataDir(), Constants.CURRENT_USER_FILE);
+        File loged = new File(Contexto.getDataDir(), Constants.CURRENT_USER_FILE);
         if(loged.exists()) {
             return getUsuario(Util.readFile(loged));
         }else
@@ -68,10 +68,10 @@ public class UsuarioDAO implements IUsuarioDAO {
 
     public boolean setCurrentUser(String username){
         if(username == null){
-            return Util.deleteFileOnPath(Context.getDataDir(),Constants.CURRENT_USER_FILE);
+            return Util.deleteFileOnPath(Contexto.getDataDir(),Constants.CURRENT_USER_FILE);
         }
 
-        File loged = new File(Context.getDataDir(), Constants.CURRENT_USER_FILE);
+        File loged = new File(Contexto.getDataDir(), Constants.CURRENT_USER_FILE);
         return Util.writeFile(loged,username);
     }
 
