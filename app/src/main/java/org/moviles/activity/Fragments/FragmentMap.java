@@ -8,13 +8,16 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.mapbox.mapboxsdk.Mapbox;
+import com.google.gson.Gson;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngQuad;
 import com.mapbox.mapboxsdk.maps.MapView;
@@ -24,27 +27,39 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.RasterLayer;
 import com.mapbox.mapboxsdk.style.sources.ImageSource;
 
+import org.moviles.Contexto;
+import org.moviles.activity.MenuActivity;
 import org.moviles.activity.R;
+import org.moviles.business.ClimaBusiness;
+import org.moviles.dto.ClimaDTO;
+import org.moviles.model.Clima;
 
+import java.io.IOException;
 import java.io.InputStream;
 
-public class FragmentMap extends Fragment {
+public class FragmentMap extends Fragment  {
 
     private MapView mapView;
+    private MapboxMap mapboxMap;
     private Handler handler;
     private Runnable runnable;
     private ImageButton buttonSearch;
+    private EditText editText;
+    private ClimaBusiness climaBO;
+    public static Clima clima;
     private static final String ID_IMAGE_SOURCE = "animated_image_source";
     private static final String ID_IMAGE_LAYER = "animated_image_layer";
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map,container,false);
+        clima = Contexto.getClima();
         buttonSearch =  view.findViewById(R.id.buttonSearch);
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
-
-
+        editText = view.findViewById(R.id.cityText);
+        editText.setText(clima.getCiudad()+ ", "+ clima.getPais());
+        climaBO = Contexto.getClimaBusiness(getActivity().getApplication());
 
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -61,6 +76,29 @@ public class FragmentMap extends Fragment {
                         //style.addLayer(new RasterLayer(ID_IMAGE_LAYER, ID_IMAGE_SOURCE));
 
 // Loop the GeoJSON refreshing
+
+                        buttonSearch.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String city  =  editText.getText().toString();
+                                Clima clima = getClimaByCity(city);
+                                Double lat = Double.parseDouble(clima.getCoordLat());
+                                Double lon = Double.parseDouble(clima.getCoordLon());
+
+                                CameraPosition position = new CameraPosition.Builder()
+                                        .target(new LatLng(lat, lon)) // Sets the new camera position
+                                        .zoom(4) // Sets the zoom
+                                        .bearing(180) // Rotate the camera
+                                        .tilt(30) // Set the camera tilt
+                                        .build(); // Creates a CameraPosition from the builder
+
+                                mapboxMap.animateCamera(CameraUpdateFactory
+                                        .newCameraPosition(position), 7000);
+
+
+                            }
+                        });
+
                         InputStream gifInputStream = getResources().openRawResource(R.raw.sun);
                         handler = new Handler();
                         runnable = new RefreshImageRunnable(style,  Movie.decodeStream(gifInputStream), handler);
@@ -75,6 +113,15 @@ public class FragmentMap extends Fragment {
         return view;
 
     }
+
+    private Clima getClimaByCity(String city) {
+        ((MenuActivity)getActivity()).getFromApi(city);
+        Clima clima = Contexto.getClima();
+        ClimaBusiness cBO =  Contexto.getClimaBusiness(getActivity().getApplication());
+        cBO.insert(clima);
+        return clima;
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -108,7 +155,7 @@ public class FragmentMap extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-       // mapView.onDestroy(); //Crashea no se porque...
+        //mapView.onDestroy();
     }
 
     @Override
@@ -120,21 +167,23 @@ public class FragmentMap extends Fragment {
     private int getWeatherImage(){
         return R.drawable.ic_cloudy_day_1;
     }
-    private LatLngQuad getCoords() {
-        double centerLat = -31.4135;
-        double centerLong= -64.18105;
 
-        double topLeftLat= centerLat + 1;
-        double topLeftLong = centerLong -1;
+   /* private LatLngQuad getCoords() {
+        double centerLat = Double.parseDouble(clima.getCoordLat());//-31.4135;
+        double centerLong= Double.parseDouble(clima.getCoordLon());//-64.18105;
+        double size =0.6;
 
-        double topRightLat= centerLat + 1;
-        double topRightLong = centerLong + 1;
+        double topLeftLat= centerLat + size;
+        double topLeftLong = centerLong - size;
 
-        double bottomLeftLat = centerLat - 1;
-        double bottomLeftLong = centerLong - 1;
+        double topRightLat= centerLat + size;
+        double topRightLong = centerLong + size;
 
-        double bottomRightLat = centerLat - 1;
-        double bottomRightLong = centerLong + 1;
+        double bottomRightLat = centerLat - size;
+        double bottomRightLong = centerLong + size;
+
+        double bottomLeftLat = centerLat - size;
+        double bottomLeftLong = centerLong - size;
 
         return new LatLngQuad(
 
@@ -160,8 +209,8 @@ public class FragmentMap extends Fragment {
           new LatLng(-31.4135, -55.181),
           new LatLng(-40.4135, -55.181),
           new LatLng(-40.4135, -64.181));
-        * */
-    }
+
+    }*/
 
 
     private static class RefreshImageRunnable implements Runnable {
@@ -183,8 +232,8 @@ public class FragmentMap extends Fragment {
 
         @Override
         public void run() {
-            double centerLat = -31.4135;
-            double centerLong= -64.18105;
+            double centerLat = Double.parseDouble(clima.getCoordLat());//-31.4135;
+            double centerLong= Double.parseDouble(clima.getCoordLon());//-64.18105;
             double size =0.6;
 
             double topLeftLat= centerLat + size;

@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
 import org.moviles.Constants;
-import org.moviles.Context;
+import org.moviles.Contexto;
 import org.moviles.PreferencesUtils;
 import org.moviles.Receiver;
 import org.moviles.Util;
@@ -32,13 +32,13 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        Context.setContext(getApplicationContext());
-        Context.setDataDir(getApplicationContext().getDataDir());
+        Contexto.setContext(getApplicationContext());
+        Contexto.setDataDir(getApplicationContext().getDataDir());
 
-        Usuario aux = Context.getUsuarioBusiness().getCurrentUser();
+        Usuario aux = Contexto.getUsuarioBusiness().getCurrentUser();
         if(aux != null){
             manageAlarms();
-            Context.getUsuarioBusiness().setMantenerSesion(true);
+            Contexto.getUsuarioBusiness().setMantenerSesion(true);
             Intent i = new Intent(this, MenuActivity.class);
             startActivity(i);
             finish();
@@ -54,7 +54,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void setClimaByDefault() {
 
-        ClimaBusiness cBO= Context.getClimaBusiness(getApplication());
+        ClimaBusiness cBO= Contexto.getClimaBusiness(getApplication());
         Clima climaDefault = new Clima();
         Date date = new Date();
         Calendar c = Calendar.getInstance();
@@ -111,8 +111,8 @@ public class SplashActivity extends AppCompatActivity {
         Intent intent=new Intent(this, Receiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this,REQUEST_CODE,intent,PendingIntent.FLAG_UPDATE_CURRENT);
 
-        String user = Context.getUsuarioBusiness().getCurrentUser().getUsuario();
-        ConfiguracionBusiness configBO = Context.getConfiguracionBusiness();
+        String user = Contexto.getUsuarioBusiness().getCurrentUser().getUsuario();
+        ConfiguracionBusiness configBO = Contexto.getConfiguracionBusiness();
         PreferencesUtils preferencesUtils = new PreferencesUtils(getApplicationContext());
         Configuracion config =  configBO.getConfiguracion(user, preferencesUtils);
 

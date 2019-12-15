@@ -1,16 +1,9 @@
 package org.moviles.dto;
 
-import org.moviles.Context;
-import org.moviles.PreferencesUtils;
 import org.moviles.Util;
-import org.moviles.business.ConfiguracionBusiness;
 import org.moviles.model.Clima;
-import org.moviles.model.Configuracion;
 
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class ClimaDTO {
@@ -57,8 +50,8 @@ public class ClimaDTO {
         clima.setDiaNumero(dia);
         clima.setTimestamp(dt.longValue());
         clima.setCiudad(name);
-        //clima.setCoordLat(coord.lat);
-        //clima.setCoordLon(coord.lon);
+        clima.setCoordLat(coord.lat);
+        clima.setCoordLon(coord.lon);
         clima.setPais(sys.country);
 
 

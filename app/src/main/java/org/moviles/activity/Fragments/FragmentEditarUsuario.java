@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -27,10 +26,9 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.moviles.Constants;
-import org.moviles.Context;
+import org.moviles.Contexto;
 import org.moviles.Util;
 import org.moviles.activity.Interfaces.IFragmentEditarUsuarioListener;
-import org.moviles.activity.MenuActivity;
 import org.moviles.activity.R;
 import org.moviles.business.UsuarioBusiness;
 import org.moviles.model.Usuario;
@@ -84,12 +82,12 @@ public class FragmentEditarUsuario extends Fragment {
         correo = contenedor.findViewById(R.id.correoPerfil);
         password = contenedor.findViewById(R.id.contrasenaPerfil);
 
-        Usuario u = Context.getUsuarioBusiness().getCurrentUser();
+        Usuario u = Contexto.getUsuarioBusiness().getCurrentUser();
         nombre.setText(u.getUsuario());
         correo.setText(u.getEmail());
         password.setText(u.getPassword());
 
-        File fl = new File(Context.getDataDir(),
+        File fl = new File(Contexto.getDataDir(),
                 u.getUsuario()+"/"+ Constants.USER_AVATAR);
         if(fl.exists()){
             Bitmap bmp = Util.getImage(fl);
@@ -100,11 +98,11 @@ public class FragmentEditarUsuario extends Fragment {
     }
 
     private void guardar(){
-        UsuarioBusiness userBO = Context.getUsuarioBusiness();
+        UsuarioBusiness userBO = Contexto.getUsuarioBusiness();
         Usuario currentUser = userBO.getCurrentUser();
 
         if(bmp != null) {
-            File fl = new File(Context.getDataDir(),
+            File fl = new File(Contexto.getDataDir(),
                     currentUser.getUsuario() + "/" + Constants.USER_AVATAR);
 
             Util.saveImage(fl, bmp);
@@ -128,14 +126,14 @@ public class FragmentEditarUsuario extends Fragment {
                 return;
             }
 
-            Util.renameFile(new File(Context.getDataDir(), currentUser.getUsuario()), user.getUsuario());
+            Util.renameFile(new File(Contexto.getDataDir(), currentUser.getUsuario()), user.getUsuario());
             userBO.changeUserNameList(currentUser.getUsuario(),user.getUsuario());
 
         }
 
         currentUser = user;
         if(userBO.update(currentUser)){
-            Context.getUsuarioBusiness().setCurrentUser(currentUser);
+            Contexto.getUsuarioBusiness().setCurrentUser(currentUser);
             Toast toast = Toast.makeText(getActivity().getApplicationContext(),R.string.guardado, Toast.LENGTH_SHORT);
             toast.show();
         }

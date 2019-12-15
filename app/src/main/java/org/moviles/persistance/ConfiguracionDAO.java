@@ -2,18 +2,14 @@ package org.moviles.persistance;
 
 import org.json.JSONObject;
 import org.moviles.Constants;
-import org.moviles.Context;
 import org.moviles.PreferencesUtils;
-import org.moviles.Util;
 import org.moviles.model.Configuracion;
-
-import java.io.File;
 
 public class ConfiguracionDAO implements IConfiguracionDAO {
     @Override
     public Configuracion getConfiguracion(String user , PreferencesUtils preferencesUtils) {
         /*Antigua forma de obtener configuraciones
-        /*File userConfigFile = new File(Context.getDataDir(),
+        /*File userConfigFile = new File(Contexto.getDataDir(),
                 user + "/" + Constants.USER_CONFIG);
         if(!userConfigFile.exists())
             return null;
@@ -32,7 +28,7 @@ public class ConfiguracionDAO implements IConfiguracionDAO {
     public boolean save(Configuracion config, String user, PreferencesUtils preferencesUtils) {
         /*Antigua Forma de guardar preferences
         /*String json = getJSON(config);
-        File file = new File(Context.getDataDir(),
+        File file = new File(Contexto.getDataDir(),
                 user+"/"+Constants.USER_CONFIG);
 
         return Util.writeFile(file,json);*/

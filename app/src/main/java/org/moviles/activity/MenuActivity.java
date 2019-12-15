@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -39,9 +37,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.mapbox.mapboxsdk.Mapbox;
 
-import org.moviles.ClimaLocationListener;
 import org.moviles.Constants;
-import org.moviles.Context;
+import org.moviles.Contexto;
 import org.moviles.PreferencesUtils;
 import org.moviles.Util;
 import org.moviles.activity.Fragments.FragmentClimaExtendido;
@@ -92,10 +89,10 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        Context.setContext(getApplicationContext());
+        Contexto.setContext(getApplicationContext());
         setTitle("Menu");
 
-        cBO = Context.getClimaBusiness(getApplication());
+        cBO = Contexto.getClimaBusiness(getApplication());
 
         fragmentContainer = findViewById(R.id.fragment_container);
 
@@ -104,7 +101,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         nombreUsuarioMenu = headerView.findViewById(R.id.nombreUsuarioMenu);
         emailUsuarioMenu = headerView.findViewById(R.id.emailUsuarioMenu);
         avatar = headerView.findViewById(R.id.avatar);
-
         cargarUsuario();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -116,7 +112,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        getFromApi();
+        getFromApi("Córdoba");
 
         FragmentHome fh = new FragmentHome();
         FragmentManager fm = getSupportFragmentManager();
@@ -128,11 +124,11 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private void getFromApi() {
+    public void getFromApi(String city) {
         if (isNetworkConnected()) {
             try {
-                climaActual = new DownloadInfoClimaTask().execute("Córdoba").get();
-                Context.clima= climaActual;
+                climaActual = new DownloadInfoClimaTask().execute(city).get();
+                Contexto.clima= climaActual;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -153,7 +149,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         if (isNetworkConnected()) {
             try {
                 climaListActual = new DownloadInfoListClimaTask().execute("Córdoba").get();
-                Context.climaList = climaListActual;
+                Contexto.climaList = climaListActual;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -183,24 +179,24 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 return;
             }
 
-            if (!Context.getUsuarioBusiness().isMantenerSesion())
-                Context.getUsuarioBusiness().setCurrentUser(null);
+            if (!Contexto.getUsuarioBusiness().isMantenerSesion())
+                Contexto.getUsuarioBusiness().setCurrentUser(null);
             super.onBackPressed();
         }
     }
 
     @Override
     protected void onDestroy() {
-        if (!Context.getUsuarioBusiness().isMantenerSesion())
-            Context.getUsuarioBusiness().setCurrentUser(null);
+        if (!Contexto.getUsuarioBusiness().isMantenerSesion())
+            Contexto.getUsuarioBusiness().setCurrentUser(null);
         super.onDestroy();
     }
 
     private void cargarUsuario() {
-        Usuario user = Context.getUsuarioBusiness().getCurrentUser();
+        Usuario user = Contexto.getUsuarioBusiness().getCurrentUser();
         nombreUsuarioMenu.setText(user.getUsuario());
         emailUsuarioMenu.setText(user.getEmail());
-        File img = new File(Context.getDataDir(), user.getUsuario() + "/" + Constants.USER_AVATAR);
+        File img = new File(Contexto.getDataDir(), user.getUsuario() + "/" + Constants.USER_AVATAR);
         Bitmap bmp = Util.getImage(img);
         avatar.setImageBitmap(bmp);
     }
@@ -210,7 +206,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         builder.setMessage(R.string.cerrarSesionMensaje)
                 .setPositiveButton(R.string.ACEPTAR, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if (!Context.getUsuarioBusiness().setCurrentUser(null))
+                        if (!Contexto.getUsuarioBusiness().setCurrentUser(null))
                             return;
                         Intent i = new Intent(MenuActivity.this, LoginActivity.class);
                         startActivity(i);
@@ -337,11 +333,11 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void actualizarConfiguracion(Configuracion config) {
-        ConfiguracionBusiness configBO = Context.getConfiguracionBusiness();
-        String user = Context.getUsuarioBusiness().getCurrentUser().getUsuario();
+        ConfiguracionBusiness configBO = Contexto.getConfiguracionBusiness();
+        String user = Contexto.getUsuarioBusiness().getCurrentUser().getUsuario();
         PreferencesUtils preferencesUtils = new PreferencesUtils(getApplicationContext());
         boolean valid = configBO.save(config, user, preferencesUtils);
-        getFromApi();
+        getFromApi(Contexto.getClima().getCiudad());
         cargarHome();
         if (valid)
             Toast.makeText(getApplicationContext(), getString(R.string.configuracionGuardada), Toast.LENGTH_SHORT).show();
@@ -376,7 +372,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         if (c == null)
             c = cBO.getClimaByCity("Córdoba");
         if (c != null)
-            Context.setClima(c);
+            Contexto.setClima(c);
 
 
     }
@@ -442,8 +438,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         Gson gson = new Gson();
         ClimaDTO climaDTO = gson.fromJson(res,ClimaDTO.class);
         Clima clima = climaDTO.getClima();
-        Context.setClima(clima);
-        ClimaBusiness cBO =  Context.getClimaBusiness(getApplication());
+        Contexto.setClima(clima);
+        ClimaBusiness cBO =  Contexto.getClimaBusiness(getApplication());
         cBO.insert(clima);
             return clima;
 
@@ -457,13 +453,13 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         Gson gson = new Gson();
         ClimaListDTO climaListDTO = gson.fromJson(res,ClimaListDTO.class);
         List<Clima> climaList = climaListDTO.getListClima();
-        Context.setClimaList(climaList);
-        ClimaBusiness cBO =  Context.getClimaBusiness(getApplication());
+        Contexto.setClimaList(climaList);
+        ClimaBusiness cBO =  Contexto.getClimaBusiness(getApplication());
         cBO.insertClimas(climaList);
         return climaList;
     }
 
-    private static String convertStreamToString(InputStream inputStream) {
+    public static String convertStreamToString(InputStream inputStream) {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         StringBuilder stringBuilder = new StringBuilder();
         String line;
@@ -477,10 +473,10 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         return stringBuilder.toString();
     }
 
-    private InputStream retrieveStreamByCity(String city) throws IOException {
+    public InputStream retrieveStreamByCity(String city) throws IOException {
         URL url = null;
-        ConfiguracionBusiness configBO = Context.getConfiguracionBusiness();
-        String user = Context.getUsuarioBusiness().getCurrentUser().getUsuario();
+        ConfiguracionBusiness configBO = Contexto.getConfiguracionBusiness();
+        String user = Contexto.getUsuarioBusiness().getCurrentUser().getUsuario();
         PreferencesUtils preferencesUtils = new PreferencesUtils(getApplicationContext());
         Configuracion config = configBO.getConfiguracion(user, preferencesUtils);
         String unidad=  config.getUnidad().split(" ")[0];
@@ -496,8 +492,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
     private InputStream retrieveStreamListByCity(String city) throws IOException {
         URL url = null;
-        ConfiguracionBusiness configBO = Context.getConfiguracionBusiness();
-        String user = Context.getUsuarioBusiness().getCurrentUser().getUsuario();
+        ConfiguracionBusiness configBO = Contexto.getConfiguracionBusiness();
+        String user = Contexto.getUsuarioBusiness().getCurrentUser().getUsuario();
         PreferencesUtils preferencesUtils = new PreferencesUtils(getApplicationContext());
         Configuracion config = configBO.getConfiguracion(user, preferencesUtils);
         String unidad=  config.getUnidad().split(" ")[0];

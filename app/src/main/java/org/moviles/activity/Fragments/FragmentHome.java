@@ -14,14 +14,12 @@ import androidx.annotation.Nullable;
 
 import androidx.fragment.app.Fragment;
 
-import org.moviles.Context;
+import org.moviles.Contexto;
 import org.moviles.PreferencesUtils;
 import org.moviles.activity.R;
 import org.moviles.business.ConfiguracionBusiness;
 import org.moviles.model.Clima;
 import org.moviles.model.Configuracion;
-
-import java.util.List;
 
 
 public class FragmentHome extends Fragment {
@@ -35,6 +33,7 @@ public class FragmentHome extends Fragment {
     private TextView descripcionBTextView;
     private TextView descripcionDTextView;
     private ImageView imageWeather;
+    private TextView ciudadTxt;
     ConfiguracionBusiness configuracionBusiness;
     String unidadViento;
     String unidadTemp;
@@ -42,11 +41,11 @@ public class FragmentHome extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View contenedor = inflater.inflate(R.layout.fragment_home,container,false);
-        Clima clima  = Context.getClima();
+        Clima clima  = Contexto.getClima();
 
-        configuracionBusiness = Context.getConfiguracionBusiness();
-        PreferencesUtils pu = new PreferencesUtils(Context.getContext());
-        Configuracion config = configuracionBusiness.getConfiguracion(Context.getUsuarioBusiness().getCurrentUser().getUsuario(), pu);
+        configuracionBusiness = Contexto.getConfiguracionBusiness();
+        PreferencesUtils pu = new PreferencesUtils(Contexto.getContext());
+        Configuracion config = configuracionBusiness.getConfiguracion(Contexto.getUsuarioBusiness().getCurrentUser().getUsuario(), pu);
         String [] units= config.getUnidad().split(" ");
         defineUnits(units[0]);
 
@@ -66,6 +65,8 @@ public class FragmentHome extends Fragment {
         descripcionDTextView.setText(clima.getCondicion());
         imageWeather = contenedor.findViewById(R.id.imageWeather);
         imageWeather.setImageDrawable(getImageByDescription(clima.getCondicion()));
+        ciudadTxt = contenedor.findViewById(R.id.ciudad);
+        ciudadTxt.setText(clima.getCiudad()+", "+ clima.getPais());
 
 
         return contenedor;

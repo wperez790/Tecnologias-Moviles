@@ -3,16 +3,10 @@ package org.moviles.business;
 import android.app.Application;
 import android.location.Location;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
-
-import org.moviles.Context;
 import org.moviles.model.Clima;
 import org.moviles.persistance.ClimaRepository;
 
 import java.util.List;
-import java.util.concurrent.Executor;
 
 public class ClimaBusiness {
     private ClimaRepository climaRepository ;
@@ -48,7 +42,14 @@ public class ClimaBusiness {
     }
 
     public Clima getClimaByCity(String city){
-        Clima climaByCity = climaRepository.getClimaByCity(city);
+        Clima climaByCity = new Clima();
+        try {
+            climaByCity = climaRepository.getClimaByCity(city);
+
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
         return climaByCity;
     }
 
