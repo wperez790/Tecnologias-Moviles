@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.gson.Gson;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -31,11 +30,10 @@ import org.moviles.Contexto;
 import org.moviles.activity.MenuActivity;
 import org.moviles.activity.R;
 import org.moviles.business.ClimaBusiness;
-import org.moviles.dto.ClimaDTO;
 import org.moviles.model.Clima;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 public class FragmentMap extends Fragment  {
 
@@ -61,9 +59,11 @@ public class FragmentMap extends Fragment  {
         editText.setText(clima.getCiudad()+ ", "+ clima.getPais());
         climaBO = Contexto.getClimaBusiness(getActivity().getApplication());
 
+
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(@NonNull MapboxMap mapboxMap) {
+                mapboxMap.setCameraPosition(getCameraPosition());
                 mapboxMap.setStyle(Style.SATELLITE_STREETS, new Style.OnStyleLoaded() {
                     @Override
                     public void onStyleLoaded(@NonNull Style style) {
@@ -81,28 +81,32 @@ public class FragmentMap extends Fragment  {
                             @Override
                             public void onClick(View v) {
                                 String city  =  editText.getText().toString();
-                                Clima clima = getClimaByCity(city);
-                                Double lat = Double.parseDouble(clima.getCoordLat());
-                                Double lon = Double.parseDouble(clima.getCoordLon());
-
-                                CameraPosition position = new CameraPosition.Builder()
-                                        .target(new LatLng(lat, lon)) // Sets the new camera position
-                                        .zoom(4) // Sets the zoom
-                                        .bearing(180) // Rotate the camera
-                                        .tilt(30) // Set the camera tilt
-                                        .build(); // Creates a CameraPosition from the builder
+                                clima = getClimaByCity(city);
+                               CameraPosition position = getCameraPosition();
 
                                 mapboxMap.animateCamera(CameraUpdateFactory
-                                        .newCameraPosition(position), 7000);
+                                        .newCameraPosition(position), 4000, new MapboxMap.CancelableCallback() {
+                                    @Override
+                                    public void onCancel() {
+                                        refresh();
+                                    }
 
+                                    @Override
+                                    public void onFinish() {
+                                        refresh();
+                                    }
+                                });
 
                             }
                         });
+                        InputStream gifInputStream = getImageByCondicion(clima.getCondicion());
 
-                        InputStream gifInputStream = getResources().openRawResource(R.raw.sun);
                         handler = new Handler();
-                        runnable = new RefreshImageRunnable(style,  Movie.decodeStream(gifInputStream), handler);
-                        handler.postDelayed(runnable, 100);
+                        if(gifInputStream!=null) {
+                            runnable = new RefreshImageRunnable(style, Movie.decodeStream(gifInputStream), handler);
+                            handler.postDelayed(runnable, 100);
+
+                        }
 
 
                     }
@@ -112,6 +116,54 @@ public class FragmentMap extends Fragment  {
 
         return view;
 
+    }
+    private void refresh(){
+        getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+
+    }
+
+    private CameraPosition getCameraPosition(){
+        Double lat = Double.parseDouble(clima.getCoordLat());
+        Double lon = Double.parseDouble(clima.getCoordLon());
+
+        CameraPosition position = new CameraPosition.Builder()
+                .target(new LatLng(lat, lon)) // Sets the new camera position
+                .zoom(4) // Sets the zoom
+                .bearing(360) // Rotate the camera
+                .tilt(30) // Set the camera tilt
+                .build(); // Creates a CameraPosition from the builder
+
+        return position;
+    }
+
+    private InputStream getImageByCondicion(String condicion) {
+        InputStream inputStream= null;
+        switch (condicion) {
+            case "Thunderstorm":
+                inputStream = getResources().openRawResource(R.raw.thunder);
+                ;
+                break;
+            case "Clear":
+                inputStream = getResources().openRawResource(R.raw.sun);
+                ;
+                break;
+            case "Clouds":
+                inputStream = getResources().openRawResource(R.raw.cloudy);
+                ;
+                break;
+            case "Rain":
+                inputStream = getResources().openRawResource(R.raw.rainy);
+                ;
+                break;
+            case "Drizzle":
+                inputStream = getResources().openRawResource(R.raw.verycloudy);
+                break;
+            case "Snow":
+                inputStream = getResources().openRawResource(R.raw.snowy);
+                break;
+
+        }
+        return inputStream;
     }
 
     private Clima getClimaByCity(String city) {
@@ -138,12 +190,14 @@ public class FragmentMap extends Fragment  {
     public void onPause() {
         super.onPause();
         mapView.onPause();
+
     }
 
     @Override
     public void onStop() {
         super.onStop();
         mapView.onStop();
+
     }
 
     @Override
@@ -163,54 +217,6 @@ public class FragmentMap extends Fragment  {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
     }
-
-    private int getWeatherImage(){
-        return R.drawable.ic_cloudy_day_1;
-    }
-
-   /* private LatLngQuad getCoords() {
-        double centerLat = Double.parseDouble(clima.getCoordLat());//-31.4135;
-        double centerLong= Double.parseDouble(clima.getCoordLon());//-64.18105;
-        double size =0.6;
-
-        double topLeftLat= centerLat + size;
-        double topLeftLong = centerLong - size;
-
-        double topRightLat= centerLat + size;
-        double topRightLong = centerLong + size;
-
-        double bottomRightLat = centerLat - size;
-        double bottomRightLong = centerLong + size;
-
-        double bottomLeftLat = centerLat - size;
-        double bottomLeftLong = centerLong - size;
-
-        return new LatLngQuad(
-
-
-                 new LatLng(topLeftLat, topLeftLong),
-                new LatLng(topRightLat, topRightLong),
-                new LatLng(bottomLeftLat, bottomLeftLong),
-                new LatLng(bottomRightLat, bottomRightLong));
-                /*new LatLng(topLeftLat, topLeftLong),
-                new LatLng(topLeftLat, topRightLong),
-                new LatLng(37.936, topRightLong),
-                new LatLng(37.936, topLeftLong));*/
-
-        /*
-        * new LatLng(x, y),
-          new LatLng(x, z),
-          new LatLng(w, z),
-           new LatLng(w, y));
-        * */
-
-        /*
-        * new LatLng(-31.4135, -64.181),
-          new LatLng(-31.4135, -55.181),
-          new LatLng(-40.4135, -55.181),
-          new LatLng(-40.4135, -64.181));
-
-    }*/
 
 
     private static class RefreshImageRunnable implements Runnable {
@@ -284,39 +290,10 @@ public class FragmentMap extends Fragment  {
                 style.addLayer(new RasterLayer(ID_IMAGE_LAYER, ID_IMAGE_SOURCE));
             }
 
+
             imageSource.setImage(bitmap);
             handler.postDelayed(this, 50);
-        /*
-        private final Style loadedMapStyle;
-        private final Handler handler;
-        private int[] drawables;
-        private int drawableIndex;
 
-        RefreshImageRunnable(Handler handler, Movie movie, Style loadedMapStyle) {
-            this.handler = handler;
-            this.loadedMapStyle = loadedMapStyle;
-            drawables = new int[4];
-            drawables= setDrawables(drawables);
-            drawableIndex = 1;
-        }
-
-        private int[] setDrawables(int[] drawables) {
-
-            drawables[0] = R.drawable.ic_cloudy_day_1;
-            drawables[1] = R.drawable.ic_cloudy_day_1;
-            drawables[2] = R.drawable.ic_cloudy_day_1;
-            drawables[3] = R.drawable.ic_cloudy_day_1;
-            return drawables;
-        }
-
-        @Override
-        public void run() {
-            ((ImageSource) loadedMapStyle.getSource(ID_IMAGE_SOURCE)).setImage(drawables[drawableIndex++]);
-            if (drawableIndex > 3) {
-                drawableIndex = 0;
-            }
-            handler.postDelayed(this, 1000);
-        }*/
         }
     }
 

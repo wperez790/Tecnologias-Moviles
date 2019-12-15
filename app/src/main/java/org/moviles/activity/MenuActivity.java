@@ -437,7 +437,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
         Gson gson = new Gson();
         ClimaDTO climaDTO = gson.fromJson(res,ClimaDTO.class);
-        Clima clima = climaDTO.getClima();
+        Clima clima = climaDTO.getClima(false);
         Contexto.setClima(clima);
         ClimaBusiness cBO =  Contexto.getClimaBusiness(getApplication());
         cBO.insert(clima);
@@ -523,7 +523,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         @Override
         protected void onPostExecute(Clima clima) {
             super.onPostExecute(clima);
-            cargarHome();
         }
     }
 
@@ -542,7 +541,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         @Override
         protected void onPostExecute(List<Clima> climaList) {
             super.onPostExecute(climaList);
-            cargarDetalle();
         }
     }
 

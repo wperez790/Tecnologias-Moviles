@@ -27,7 +27,7 @@ public class ClimaDTO {
 
     private class Wind{ Double speed; Double deg;}
 
-    public Clima getClima(){
+    public Clima getClima(Boolean isList){
 
         Clima clima = new Clima();
         clima.setTemperatura(main.temp);
@@ -50,8 +50,10 @@ public class ClimaDTO {
         clima.setDiaNumero(dia);
         clima.setTimestamp(dt.longValue());
         clima.setCiudad(name);
-        clima.setCoordLat(coord.lat);
-        clima.setCoordLon(coord.lon);
+        if(!isList) {
+            clima.setCoordLat(coord.lat);
+            clima.setCoordLon(coord.lon);
+        }
         clima.setPais(sys.country);
 
 
