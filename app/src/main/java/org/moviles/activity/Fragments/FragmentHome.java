@@ -75,7 +75,16 @@ public class FragmentHome extends Fragment {
         Drawable draw = getResources().getDrawable(R.drawable.ic_map, getContext().getTheme());
         switch (descripcion){
             case "Thunderstorm": draw = getResources().getDrawable(R.drawable.ic_thunder, getContext().getTheme());
-            break;
+                break;
+            case "Clear": draw = getResources().getDrawable(R.drawable.ic_day, getContext().getTheme());
+                break;
+            case "Clouds" : draw =  getResources().getDrawable(R.drawable.ic_cloudy, getContext().getTheme());
+                break;
+            case "Rain": draw = getResources().getDrawable(R.drawable.ic_rainy_6, getContext().getTheme());
+                break;
+            case "Drizzle": draw =  getResources().getDrawable(R.drawable.ic_rainy_2, getContext().getTheme());
+                break;
+                
         }
         return draw;
 
