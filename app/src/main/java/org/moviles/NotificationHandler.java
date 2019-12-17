@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import androidx.core.app.NotificationCompat;
 import org.moviles.activity.R;
+import org.moviles.model.Clima;
 
 public class NotificationHandler {
 
@@ -16,11 +17,11 @@ public class NotificationHandler {
     }
 
     public void sendClimaNotification() {
-
+        Clima clima = Contexto.getClima();
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, Constants.NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle(context.getString(R.string.app_name))
-                .setContentText(context.getString(R.string.notification_message))
+                .setContentText(clima.getCiudad()+", "+clima.getPais()+" "+clima.getTemperatura()+Contexto.getUnidadTemp()+" "+clima.getDescripcion())
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

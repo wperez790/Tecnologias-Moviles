@@ -16,6 +16,8 @@ public class ClimaDTO {
     String name;
     Coord coord;
     Sys sys;
+    String dt_txt;
+
 
     private class Sys{String country;}
 
@@ -54,6 +56,8 @@ public class ClimaDTO {
             clima.setCoordLat(coord.lat);
             clima.setCoordLon(coord.lon);
         }
+        else
+            clima.setHora(dt_txt);
         clima.setPais(sys.country);
 
 

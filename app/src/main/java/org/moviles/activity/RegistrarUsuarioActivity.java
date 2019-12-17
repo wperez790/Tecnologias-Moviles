@@ -30,7 +30,6 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_usuario);
         setTitle("Crear usuario");
-
         nuevoUsuario = findViewById(R.id.nuevoUsuario);
         nuevaPassword = findViewById(R.id.nuevaPassword);
         nuevoCorreo = findViewById(R.id.nuevoCorreo);

@@ -35,7 +35,11 @@
         </activity>
 
         <activity android:name="org.moviles.activity.RegistrarUsuarioActivity"
-            android:parentActivityName="org.moviles.activity.LoginActivity"></activity>
+            android:parentActivityName=".LoginActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LoginActivity" />
+        </activity>
 
         <!-- Register the Alarm Receiver -->
         <receiver android:name="org.moviles.Receiver" android:enabled="true"> <intent-filter>

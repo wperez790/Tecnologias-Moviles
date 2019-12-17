@@ -168,9 +168,13 @@ public class FragmentMap extends Fragment  {
 
     private Clima getClimaByCity(String city) {
         ((MenuActivity)getActivity()).getFromApi(city);
-        Clima clima = Contexto.getClima();
-        ClimaBusiness cBO =  Contexto.getClimaBusiness(getActivity().getApplication());
-        cBO.insert(clima);
+        Clima clima = new Clima();
+        if(Contexto.clima!=null) {
+            clima = Contexto.getClima();
+            ClimaBusiness cBO =  Contexto.getClimaBusiness(getActivity().getApplication());
+            cBO.insert(clima);
+        }
+
         return clima;
     }
 
