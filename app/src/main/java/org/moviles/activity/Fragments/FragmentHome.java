@@ -35,8 +35,8 @@ public class FragmentHome extends Fragment {
     private ImageView imageWeather;
     private TextView ciudadTxt;
     ConfiguracionBusiness configuracionBusiness;
-    String unidadViento;
-    String unidadTemp;
+    String unidadViento ;
+    String unidadTemp ;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -104,6 +104,8 @@ public class FragmentHome extends Fragment {
             unidadTemp = " ºK";
             unidadViento = " Km/h";
         }
+        Contexto.unidadTemp = unidadTemp;
+        Contexto.unidadViento = unidadViento;
     }
 
 

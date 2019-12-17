@@ -32,6 +32,7 @@ public class Clima{
     private String coordLon;
     private String coordLat;
     private Long timestamp;
+    private String hora;
 
     public String getCiudad() {
         return ciudad;
@@ -65,7 +66,7 @@ public class Clima{
         this.coordLat = coordLat;
     }
 
-    public Long getTimestamp() {
+   public Long getTimestamp() {
         return timestamp;
     }
 
@@ -177,5 +178,12 @@ public class Clima{
         this.diaNumero = diaNumero;
     }
 
+    public String getHora() {
+        return hora;
+    }
 
+    public void setHora(String hora) {
+        String horaSplited = hora.split(" ")[1];
+        this.hora = horaSplited;
+    }
 }

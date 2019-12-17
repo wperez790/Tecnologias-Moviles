@@ -12,6 +12,8 @@ import java.util.List;
 
 public class Contexto {
     public static List<Clima> climaList;
+    public static String unidadTemp;
+    public static String unidadViento;
     private static UsuarioBusiness usuarioBusiness;
     private static File dataDir;
     private static ConfiguracionBusiness configuracionBusiness;
@@ -25,6 +27,15 @@ public class Contexto {
     public static File getDataDir(){
         return dataDir;
     }
+
+    public static String getUnidadTemp() {
+        return unidadTemp;
+    }
+
+    public static String getUnidadViento() {
+        return unidadViento;
+    }
+
 
     public static UsuarioBusiness getUsuarioBusiness(){
         if (usuarioBusiness == null)

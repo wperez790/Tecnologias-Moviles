@@ -29,7 +29,6 @@ public class LoginActivity extends AppCompatActivity implements ListaUsuarioRecy
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         cargarFragmentoLista(false);
     }
 
@@ -89,7 +88,7 @@ public class LoginActivity extends AppCompatActivity implements ListaUsuarioRecy
     public void onClickItem(int position) {
         Intent i;
         if(position == 0) {
-            i = new Intent(this, RegistrarUsuarioActivity.class);
+            i = new Intent(LoginActivity.this, RegistrarUsuarioActivity.class);
             startActivity(i);
             finish();
 

@@ -10,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -128,7 +129,14 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         if (isNetworkConnected()) {
             try {
                 climaActual = new DownloadInfoClimaTask().execute(city).get();
-                Contexto.clima= climaActual;
+                if(climaActual!=null)
+                    Contexto.clima= climaActual;
+                else {
+                 Toast toast = Toast.makeText(getApplicationContext(),
+                         "No se encuentra", Toast.LENGTH_SHORT);
+                 toast.setGravity(Gravity.TOP, 0, 0);
+                 toast.show();
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
